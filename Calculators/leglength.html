@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leg Length Calculator</title>
+    <style>
+        :root {
+            --primary-color: #3b82f6; /* Tailwind blue-500 */
+            --header-bg: #eff6ff;     /* Tailwind blue-50 */
+            --input-bg: #ffffff;
+            --output-bg: #f3f4f6;     /* Tailwind gray-100 */
+            --error-color: #ef4444;   /* Tailwind red-500 */
+            --warning-color: #f59e0b; /* Tailwind amber-500 */
+            --border-color: #e5e7eb;  /* Tailwind gray-200 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .calculator-wrapper {
+            max-width: 900px; /* Increased max width slightly for new column */
+            width: 100%;
+            padding: 30px;
+            background-color: var(--input-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        /* New H1 Style for the main title */
+        .main-title {
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 5px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+        h2 {
+            color: #1f2937; /* Tailwind gray-900 */
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden; 
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 10px;
+            text-align: center;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        td:first-child {
+            text-align: left;
+            font-weight: 500;
+            background-color: var(--header-bg);
+            color: #1f2937;
+        }
+        .input-row td:not(:first-child) {
+            background-color: var(--input-bg);
+        }
+        .output-row td:not(:first-child) {
+            background-color: var(--output-bg);
+            font-weight: 600;
+        }
+        .input-field {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            transition: border-color 0.2s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        /* New styles for placeholder */
+        .input-field::placeholder {
+            color: #9ca3af; /* Light gray color */
+            opacity: 1; /* For Firefox */
+        }
+        .input-field:focus::placeholder {
+            color: transparent; /* Makes placeholder invisible when focused */
+        }
+        
+        .error {
+            color: var(--error-color);
+            font-weight: 800;
+        }
+        .discrepancy {
+            font-weight: 700;
+        }
+        .total-discrepancy {
+            font-size: 1.1rem;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #2563eb; /* Tailwind blue-600 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        #image-placeholder {
+            margin-top: 30px;
+            padding: 25px;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            background-color: var(--output-bg);
+            color: #6b7280;
+            font-style: italic;
+        }
+        #image-placeholder img {
+            max-width: 100%;
+            height: auto;
+            display: block; /* Remove extra space below image */
+            margin: 0 auto; /* Center the image */
+            border-radius: 4px; /* Slightly rounded corners for the image */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for the image */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator-wrapper">
+        <!-- New Main Title -->
+        <h1 class="main-title">Leg Length Calculator</h1>
+        
+        <!-- Input Section --><h2>📏 Measurement Input (cm)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Anatomical Mark</th>
+                    <th>Right</th>
+                    <th>Left</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="input-row">
+                    <!-- Changed value="0" to placeholder="0" -->
+                    <td>Proximal Femur Mark</td>
+                    <td><input type="number" id="right-proximal-femur" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
+                    <td><input type="number" id="left-proximal-femur" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
+                </tr>
+                <tr class="input-row">
+                    <!-- Changed value="0" to placeholder="0" -->
+                    <td>Distal Femur Mark</td>
+                    <td><input type="number" id="right-distal-femur" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
+                    <td><input type="number" id="left-distal-femur" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
+                </tr>
+                <tr class="input-row">
+                    <!-- Changed value="0" to placeholder="0" -->
+                    <td>Distal Tibia Mark</td>
+                    <td><input type="number" id="right-distal-tibia" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
+                    <td><input type="number" id="left-distal-tibia" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button onclick="calculateLength()">Recalculate (Optional)</button>
+        
+        <!-- Unified Output Section --><h2>✅ Calculated Segment Lengths and Discrepancy (cm)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Segment</th>
+                    <th>Right Length (cm)</th>
+                    <th>Left Length (cm)</th>
+                    <th>Difference (R - L) (cm)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="output-row">
+                    <td>Femur Length</td>
+                    <td id="output-right-femur" class="output-field">0.0</td>
+                    <td id="output-left-femur" class="output-field">0.0</td>
+                    <td id="discrepancy-femur" class="discrepancy output-field">0.0</td>
+                </tr>
+                <tr class="output-row">
+                    <td>Tibia Length</td>
+                    <td id="output-right-tibia" class="output-field">0.0</td>
+                    <td id="output-left-tibia" class="output-field">0.0</td>
+                    <td id="discrepancy-tibia" class="discrepancy output-field">0.0</td>
+                </tr>
+                <tr class="output-row">
+                    <td style="font-weight: 700;">Total Leg Length</td>
+                    <td id="output-right-total" class="output-field" style="font-weight: 700;">0.0</td>
+                    <td id="output-left-total" class="output-field" style="font-weight: 700;">0.0</td>
+                    <td id="discrepancy-total" class="discrepancy total-discrepancy output-field">0.0</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Image Placeholder with your image --><div id="image-placeholder">
+            <p>Anatomical Reference:</p>
+            <img src="Images/leglength.png" alt="Reference image showing anatomical marks for leg length measurement">
+        </div>
+    </div>
+
+    <script>
+        function calculateLength() {
+            // Helper function to safely get input values
+            function getInputValue(id) {
+                // Now that we use placeholder, an empty string means the user hasn't typed anything.
+                // parseFloat("") returns NaN, which is correctly handled by the isNaN check below.
+                const value = parseFloat(document.getElementById(id).value);
+                
+                // Return 0 if the input is not a valid number (i.e., empty string or NaN) or is negative
+                return (isNaN(value) || value < 0) ? 0 : value;
+            }
+
+            // Get all input marks (cm)
+            const R_PF = getInputValue('right-proximal-femur');
+            const R_DF = getInputValue('right-distal-femur');
+            const R_DT = getInputValue('right-distal-tibia');
+            
+            const L_PF = getInputValue('left-proximal-femur');
+            const L_DF = getInputValue('left-distal-femur');
+            const L_DT = getInputValue('left-distal-tibia');
+
+            // --- 1. Calculate Segment Lengths ---
+            
+            // Femur Length = Proximal Femur Mark - Distal Femur Mark
+            const R_Femur = R_PF - R_DF;
+            const L_Femur = L_PF - L_DF;
+
+            // Tibia Length = Distal Femur Mark - Distal Tibia Mark
+            const R_Tibia = R_DF - R_DT;
+            const L_Tibia = L_DF - L_DT;
+            
+            // Total Length = Femur Length + Tibia Length
+            const R_Total = R_Femur + R_Tibia;
+            const L_Total = L_Femur + L_Tibia;
+
+            // --- 2. Check for Calculation Errors (Distal mark > Proximal mark) and format ---
+            
+            function formatOutput(length) {
+                // Return 'ERROR!' if the length is non-physical (negative)
+                if (length < 0) {
+                    return 'ERROR!';
+                }
+                // Return a fixed 1-decimal-place string
+                return length.toFixed(1);
+            }
+            
+            const R_Femur_Out = formatOutput(R_Femur);
+            const L_Femur_Out = formatOutput(L_Femur);
+            const R_Tibia_Out = formatOutput(R_Tibia);
+            const L_Tibia_Out = formatOutput(L_Tibia);
+            const R_Total_Out = formatOutput(R_Total);
+            const L_Total_Out = formatOutput(L_Total);
+
+            // --- 3. Update Output Table and apply error styling ---
+            
+            function updateOutput(id, content, value) {
+                const element = document.getElementById(id);
+                element.textContent = content;
+                // Apply the error class if the content is 'ERROR!'
+                if (content === 'ERROR!') {
+                    element.classList.add('error');
+                } else {
+                    element.classList.remove('error');
+                }
+            }
+
+            updateOutput('output-right-femur', R_Femur_Out, R_Femur);
+            updateOutput('output-left-femur', L_Femur_Out, L_Femur);
+            updateOutput('output-right-tibia', R_Tibia_Out, R_Tibia);
+            updateOutput('output-left-tibia', L_Tibia_Out, L_Tibia);
+            updateOutput('output-right-total', R_Total_Out, R_Total);
+            updateOutput('output-left-total', L_Total_Out, L_Total);
+
+
+            // --- 4. Calculate and Update Discrepancies ---
+            
+            function calculateDiscrepancy(right, left) {
+                // Only calculate if both base lengths are valid (>= 0)
+                if (right < 0 || left < 0) {
+                    return 'N/A';
+                }
+                const difference = right - left;
+                return difference.toFixed(1);
+            }
+
+            const Femur_Disc = calculateDiscrepancy(R_Femur, L_Femur);
+            const Tibia_Disc = calculateDiscrepancy(R_Tibia, L_Tibia);
+            const Total_Disc = calculateDiscrepancy(R_Total, L_Total);
+
+            // Update merged columns using the same IDs
+            document.getElementById('discrepancy-femur').textContent = Femur_Disc;
+            document.getElementById('discrepancy-tibia').textContent = Tibia_Disc;
+            document.getElementById('discrepancy-total').textContent = Total_Disc;
+            
+            // Set discrepancy color based on value (Red for non-zero discrepancy, normal for zero)
+            const totalDiscEl = document.getElementById('discrepancy-total');
+            const totalDiscValue = parseFloat(Total_Disc);
+
+            if (isNaN(totalDiscValue)) {
+                 // Do nothing if it's 'N/A'
+                 totalDiscEl.style.color = '#1f2937';
+            } else if (totalDiscValue !== 0) {
+                // Highlight non-zero discrepancies in red
+                totalDiscEl.style.color = 'var(--error-color)';
+            } else {
+                // Normal color for zero discrepancy
+                totalDiscEl.style.color = '#1f2937';
+            }
+
+        }
+        
+        // Run the calculation on page load to initialize outputs
+        document.addEventListener('DOMContentLoaded', calculateLength);
+    </script>
+
+</body>
+</html>

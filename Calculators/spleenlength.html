@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pediatric Spleen Length Normals</title>
+    <style>
+        /* Modern Blue Card Design Elements */
+        :root {
+            --primary-blue: #007bff; /* Bright Blue */
+            --light-blue: #e9f5ff; /* Very Light Blue for accents */
+            --dark-blue: #0056b3; /* Darker Blue for hover/emphasis */
+            --text-color: #333;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 500px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin: 20px;
+            position: relative; /* Needed for absolute positioning of thumbnail text */
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 10px;
+        }
+
+        /* Input/Selection Styles */
+        .input-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+
+        select, input[type="number"] {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input[type="number"]:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px var(--light-blue);
+            outline: none;
+        }
+
+        /* --- New Toggle Button Styles --- */
+        .toggle-group {
+            display: flex;
+        }
+
+        .toggle-button {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background-color: #e9e9e9; /* Grayed out/Inactive background */
+            color: var(--text-color);
+            border-radius: 0;
+            /* Ensure text is consistent and buttons are flexible */
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .toggle-button.active {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--dark-blue);
+            z-index: 2; /* Bring active button forward */
+        }
+        
+        /* Specific border handling for grouped look */
+        .toggle-button:first-child {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            border-right: none;
+        }
+
+        .toggle-button:last-child {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            margin-left: -1px; /* Overlap borders slightly */
+        }
+
+        .toggle-button:hover:not(.active) {
+            background-color: #d0d0d0;
+        }
+        /* --- End Toggle Button Styles --- */
+
+        /* Output Card Styles (Emphasis on Final Range) */
+        #results-card {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: var(--light-blue);
+            border-radius: 10px;
+            border-left: 5px solid var(--primary-blue);
+            min-height: 140px; /* Ensure space even if empty to prevent layout shift */
+        }
+
+        .result-item {
+            margin-bottom: 12px;
+            padding: 8px;
+            border-bottom: 1px dashed #c0d8f0;
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--dark-blue);
+            display: inline-block;
+            width: 150px;
+        }
+
+        .result-value {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .final-normal-range {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .final-normal-range .result-label {
+            color: white;
+            width: auto;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .final-normal-range .result-value {
+            color: var(--warning-color); /* Emphasize with a high-contrast color */
+            font-size: 1.5em;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Thumbnail Styles */
+        .thumbnail-container {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-blue);
+        }
+
+        #reference-thumbnail {
+            width: 100%; /* User's edit: Changed from 100px to 100% */
+            height: auto;
+            cursor: zoom-in;
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        /* User's edit: Hover scale changed to 1.1 */
+        #reference-thumbnail:hover {
+            transform: scale(1.1);
+        }
+
+        .thumbnail-text {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px); /* Optional: blur background */
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 80vh; /* Adjust as needed */
+            display: block;
+            border-radius: 8px;
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            background: none;
+            text-decoration: none;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card-container">
+    <h1>Pediatric Spleen Length Normals</h1>
+    <p>Select a reference method and a range below to view the normal limits.</p>
+    <hr>
+
+    <div class="input-group">
+        <label>Choose Reference Type:</label>
+        <input type="hidden" id="reference-type" value="age">
+        
+        <div class="toggle-group">
+            <button id="ref-age" class="toggle-button active" onclick="setReferenceTypeAndToggle('age')">Age (yrs/mos)</button>
+            <button id="ref-height" class="toggle-button" onclick="setReferenceTypeAndToggle('height')">Height (cm)</button>
+        </div>
+    </div>
+
+    <div class="input-group" id="height-select-group" style="display: none;">
+        <label for="height-select">Select Height Range (cm):</label>
+        <select id="height-select" onchange="getMeasurements()">
+            </select>
+    </div>
+
+    <div class="input-group" id="age-select-group">
+        <label for="age-select">Select Age Range:</label>
+        <select id="age-select" onchange="getMeasurements()">
+            </select>
+    </div>
+    
+    <div id="results-card" style="display: none;">
+        <div class="result-item">
+            <span class="result-label">Measurement Range:</span>
+            <span class="result-value" id="mean-range-output"></span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">5th Percentile (min):</span>
+            <span class="result-value" id="5th-percentile-output"></span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">95th Percentile (max):</span>
+            <span class="result-value" id="95th-percentile-output"></span>
+        </div>
+
+        <div class="final-normal-range">
+            <span class="result-label">Suggested Normal Limits Range:</span>
+            <span class="result-value" id="normal-limits-output"></span>
+        </div>
+    </div>
+
+    <div class="error-message" id="error-output"></div>
+
+    <hr style="margin-top: 25px;">
+    <div class="thumbnail-container">
+        <span class="thumbnail-text">Click to view reference table:</span>
+        <img src="images/spleenlength.jpeg" alt="Spleen Length Reference Table Thumbnail" id="reference-thumbnail">
+    </div>
+
+</div>
+
+<div id="image-modal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="close-button" id="close-modal-button">&times;</button>
+        <img src="images/spleenlength.jpeg" alt="Spleen Length Reference Table Full Size" id="full-size-image">
+    </div>
+</div>
+
+
+<script>
+    // Data Structure from the provided image
+    // MODIFICATION: Replace liver data with spleen data
+    const spleenData = [
+        // Height, Age, Mean, Min, Max, 5th Percentile, 95th Percentile, Suggested Lower, Suggested Upper
+        { height: '48-64', age: '1-3 mos', mean: 53, min: 33, max: 71, p5: 40, p95: 65, lowerNormal: 30, upperNormal: 70 },
+        { height: '54-73', age: '4-6 mos', mean: 59, min: 45, max: 71, p5: 47, p95: 67, lowerNormal: 40, upperNormal: 75 },
+        { height: '65-78', age: '7-9 mos', mean: 63, min: 50, max: 77, p5: 53, p95: 74, lowerNormal: 45, upperNormal: 80 },
+        { height: '71-92', age: '1-2.5 yrs', mean: 70, min: 54, max: 86, p5: 55, p95: 82, lowerNormal: 50, upperNormal: 85 },
+        { height: '85-109', age: '3-4.9 yrs', mean: 75, min: 60, max: 91, p5: 61, p95: 88, lowerNormal: 55, upperNormal: 95 },
+        { height: '100-130', age: '5-6.9 yrs', mean: 84, min: 61, max: 100, p5: 70, p95: 100, lowerNormal: 60, upperNormal: 105 },
+        { height: '110-131', age: '7-8.9 yrs', mean: 85, min: 65, max: 102, p5: 69, p95: 100, lowerNormal: 65, upperNormal: 105 },
+        { height: '124-149', age: '9-10.9 yrs', mean: 86, min: 64, max: 114, p5: 70, p95: 100, lowerNormal: 65, upperNormal: 110 },
+        { height: '137-153', age: '11-12.9 yrs', mean: 97, min: 72, max: 100, p5: 81, p95: 108, lowerNormal: 75, upperNormal: 115 },
+        { height: '143-168', age: '13-14.9 yrs', mean: 101, min: 84, max: 120, p5: 85, p95: 118, lowerNormal: 80, upperNormal: 120 },
+        { height: '152-175', age: '15-16.7 yrs', mean: 101, min: 88, max: 120, p5: 88, p95: 115, lowerNormal: 85, upperNormal: 120 },
+    ];
+    
+    // MODIFICATION: Update variable name to point to the new spleen data for consistency
+    const dataSet = spleenData; 
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const ageSelect = document.getElementById('age-select');
+        const heightSelect = document.getElementById('height-select');
+        
+        // 1. Populate Age Select dropdown
+        ageSelect.innerHTML = '<option value="">-- Select Age --</option>';
+        dataSet.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.age;
+            option.textContent = item.age + ' (Height: ' + item.height + ' cm)';
+            ageSelect.appendChild(option);
+        });
+
+        // 2. Populate new Height Select dropdown
+        heightSelect.innerHTML = '<option value="">-- Select Height Range --</option>';
+        dataSet.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.height; // Value is the height range string
+            option.textContent = item.height + ' cm (' + item.age + ')'; // Show height and age
+            heightSelect.appendChild(option);
+        });
+
+
+        // --- Modal Setup (Existing Logic) ---
+        const thumbnail = document.getElementById('reference-thumbnail');
+        const modal = document.getElementById('image-modal');
+        const closeModalButton = document.getElementById('close-modal-button');
+
+        thumbnail.onclick = function() {
+            modal.style.display = "flex";
+        }
+
+        closeModalButton.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // 3. Initial state setup: Ensure Age is selected and inputs are toggled correctly
+        toggleInputs(); 
+    });
+
+    /**
+     * Handles the button click: updates the hidden input, manages active class,
+     * and calls toggleInputs to update the UI.
+     * @param {string} type - 'age' or 'height'
+     */
+    function setReferenceTypeAndToggle(type) {
+        // 1. Update the hidden input value (used by toggleInputs/getMeasurements)
+        document.getElementById('reference-type').value = type;
+
+        // 2. Manage button visual state
+        const ageBtn = document.getElementById('ref-age');
+        const heightBtn = document.getElementById('ref-height');
+
+        if (type === 'age') {
+            ageBtn.classList.add('active');
+            heightBtn.classList.remove('active');
+        } else {
+            heightBtn.classList.add('active');
+            ageBtn.classList.remove('active');
+        }
+
+        // 3. Trigger the input visibility and measurement update logic
+        toggleInputs(); 
+    }
+
+
+    // Toggles visibility of Age/Height inputs AND calls getMeasurements to clear/update results
+    function toggleInputs() {
+        // Reads the state from the hidden input, maintaining compatibility with getMeasurements
+        const type = document.getElementById('reference-type').value; 
+        
+        document.getElementById('height-select-group').style.display = 'none';
+        document.getElementById('age-select-group').style.display = 'none';
+        
+        if (type === 'height') {
+            document.getElementById('height-select-group').style.display = 'flex';
+        } else if (type === 'age') {
+            document.getElementById('age-select-group').style.display = 'flex';
+        }
+        
+        // Call getMeasurements immediately to update or clear the results
+        getMeasurements();
+    }
+
+    // Function to calculate and display measurements, called automatically on input change
+    function getMeasurements() {
+        // Reads the state from the hidden input
+        const type = document.getElementById('reference-type').value; 
+        let dataRow = null;
+        const errorOutput = document.getElementById('error-output');
+        errorOutput.textContent = '';
+        document.getElementById('results-card').style.display = 'none';
+
+        if (!type) return; // Should not happen with buttons, but a good guardrail
+
+        if (type === 'height') {
+            const selectedHeight = document.getElementById('height-select').value;
+
+            if (!selectedHeight) {
+                // If nothing is selected, just exit (don't show an error or card)
+                return;
+            }
+
+            // Find the selected height row based on the selected height range string
+            // MODIFICATION: Use the updated dataSet variable
+            dataRow = dataSet.find(row => row.height === selectedHeight);
+
+        } else if (type === 'age') {
+            const selectedAge = document.getElementById('age-select').value;
+
+            if (!selectedAge) {
+                // If nothing is selected, just exit (don't show an error or card)
+                return;
+            }
+
+            // Find the selected age row
+            // MODIFICATION: Use the updated dataSet variable
+            dataRow = dataSet.find(row => row.age === selectedAge);
+        }
+
+        if (dataRow) {
+            // Populate the results
+            // Note: The new data uses Min/Max/Mean directly from the table, not calculated.
+            document.getElementById('mean-range-output').textContent = `${dataRow.min} - ${dataRow.max} mm (Mean: ${dataRow.mean} mm)`;
+            document.getElementById('5th-percentile-output').textContent = `${dataRow.p5} mm`;
+            document.getElementById('95th-percentile-output').textContent = `${dataRow.p95} mm`;
+
+            // Emphasized Final Output
+            document.getElementById('normal-limits-output').textContent = `${dataRow.lowerNormal} - ${dataRow.upperNormal} mm`;
+
+            // Display the card
+            document.getElementById('results-card').style.display = 'block';
+        } else {
+            // This should only happen if data is missing for a non-blank selected option
+             errorOutput.textContent = 'Data could not be found for the selected input.';
+        }
+    }
+</script>
+</body>
+</html>
