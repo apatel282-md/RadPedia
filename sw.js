@@ -1,12 +1,12 @@
-const CACHE_NAME = 'radpedia-v1';
+const CACHE_NAME = 'radpedia-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/Calculators/liverspleenlength.html',
-  '/Calculators/leglength.html',
-  '/Calculators/FORCalculator.html',
-  '/icon.png',
-  '/apple-touch-icon.png',
+  './',
+  './index.html',
+  './Calculators/liverspleenlength.html',
+  './Calculators/leglength.html',
+  './Calculators/FORCalculator.html',
+  './icon.png',
+  './apple-touch-icon.png',
   'https://cdn.tailwindcss.com'
 ];
 
