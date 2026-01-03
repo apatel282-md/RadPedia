@@ -155,10 +155,10 @@
                             class="block text-sm font-bold text-brand-text-200 mb-3 ml-1 tracking-wide uppercase text-xs">Target
                             Organ</label>
                         <div class="grid grid-cols-2 gap-3 p-1 bg-brand-bg-100 rounded-2xl">
-                            <button id="btn-liver" onclick="setOrgan('liver')"
+                            <button id="organ-liver" onclick="setOrgan('liver')"
                                 class="py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 bg-brand-bg-300 text-brand-primary-200 shadow-sm border border-white/5">Liver
                                 (R. Lobe)</button>
-                            <button id="btn-spleen" onclick="setOrgan('spleen')"
+                            <button id="organ-spleen" onclick="setOrgan('spleen')"
                                 class="py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 text-brand-text-200 hover:bg-brand-bg-300 hover:text-white">Spleen</button>
                         </div>
                         <input type="hidden" id="organ-type" value="liver">
@@ -170,10 +170,10 @@
                             class="block text-sm font-bold text-brand-text-200 mb-3 ml-1 tracking-wide uppercase text-xs">Reference
                             Method</label>
                         <div class="grid grid-cols-2 gap-3 p-1 bg-brand-bg-100 rounded-2xl">
-                            <button id="ref-age" onclick="setReferenceType('age')"
+                            <button id="ref-age" onclick="setReferenceTypeAndToggle('age')"
                                 class="py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 bg-brand-bg-300 text-brand-primary-200 shadow-sm border border-white/5">By
                                 Age</button>
-                            <button id="ref-height" onclick="setReferenceType('height')"
+                            <button id="ref-height" onclick="setReferenceTypeAndToggle('height')"
                                 class="py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 text-brand-text-200 hover:bg-brand-bg-300 hover:text-white">By
                                 Height</button>
                         </div>
@@ -248,23 +248,18 @@
 
                     <div id="error-output" class="text-red-500 text-center text-sm font-medium"></div>
 
-                    <!-- Reference Image -->
-                    <div class="pt-6 border-t border-white/5 text-center">
+                    <div class="pt-8 border-t border-white/5 text-center">
+                        <p class="text-xs font-bold uppercase tracking-widest text-brand-text-200 mb-6">Reference Chart
+                            Preview</p>
                         <button onclick="openModal()"
-                            class="group relative overflow-hidden rounded-2xl border border-white/5 transition-all hover:border-brand-primary-200">
-                            <div class="bg-brand-bg-100 px-6 py-12 flex items-center justify-center">
-                                <svg class="w-12 h-12 text-brand-primary-200 transition-transform group-hover:scale-110"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
-                            </div>
+                            class="group relative overflow-hidden rounded-3xl border border-white/5 bg-brand-bg-300 transition-all hover:border-brand-primary-200">
+                            <img id="reference-thumbnail" src="Images/SpleenLength.jpeg" alt="Reference Chart"
+                                class="w-full opacity-60 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105">
                             <div
-                                class="absolute inset-0 bg-brand-bg-100/0 flex items-center justify-center transition-all group-hover:bg-brand-bg-100/40">
-                                <div
-                                    class="bg-brand-primary-100 text-white px-4 py-2 rounded-full text-xs font-bold shadow-sm opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all">
-                                    View Reference Chart</div>
+                                class="absolute inset-0 flex items-center justify-center bg-brand-bg-100/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span
+                                    class="bg-brand-primary-100 text-white px-4 py-2 rounded-full text-xs font-bold shadow-sm">View
+                                    Full Chart</span>
                             </div>
                         </button>
                     </div>
@@ -440,9 +435,9 @@
             }
 
             if (row) {
-                document.getElementById('mean-range-output').textContent = `${row.min} - ${row.max} mm (Mean: ${row.mean} mm)`;
-                document.getElementById('5th-percentile-output').textContent = `${row.p5} mm`;
-                document.getElementById('95th-percentile-output').textContent = `${row.p95} mm`;
+                document.getElementById('mean-output').textContent = `${row.mean} mm`;
+                document.getElementById('range-output').textContent = `${row.min} - ${row.max} mm`;
+                document.getElementById('percentile-output').textContent = `${row.p5} - ${row.p95} mm`;
                 document.getElementById('normal-limits-output').textContent = `${row.lowerNormal} - ${row.upperNormal} mm`;
                 resCard.classList.remove('hidden');
             }

@@ -148,140 +148,111 @@
                 </div>
 
                 <div class="p-8 space-y-10">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                        <!-- Inputs -->
-                        <div class="space-y-8">
-                            <div>
-                                <h3 class="text-sm font-bold text-brand-text-200 mb-6 flex items-center gap-2">
-                                    <div class="w-1 h-4 bg-brand-primary-100 rounded-full"></div>
-                                    Right Leg (mm)
-                                </h3>
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Proximal
-                                            Femur</label>
-                                        <input type="number" id="right-proximal-femur" oninput="calculateLength()"
-                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-100/20 rounded-2xl bg-brand-bg-300 text-white"
-                                            placeholder="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Distal
-                                            Femur</label>
-                                        <input type="number" id="right-distal-femur" oninput="calculateLength()"
-                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-100/20 rounded-2xl bg-brand-bg-300 text-white"
-                                            placeholder="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Distal
-                                            Tibia</label>
-                                        <input type="number" id="right-distal-tibia" oninput="calculateLength()"
-                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-100/20 rounded-2xl bg-brand-bg-300 text-white"
-                                            placeholder="0">
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Measurement Input -->
+                    <div class="overflow-hidden rounded-3xl border border-white/5 bg-brand-bg-100 p-6">
+                        <div
+                            class="grid grid-cols-3 gap-6 mb-4 font-bold text-xs uppercase tracking-widest text-brand-text-200">
+                            <div class="col-span-1 pl-4">Mark</div>
+                            <div class="text-center">Right</div>
+                            <div class="text-center">Left</div>
                         </div>
-
-                        <div class="space-y-8">
-                            <div>
-                                <h3 class="text-sm font-bold text-brand-text-200 mb-6 flex items-center gap-2">
-                                    <div class="w-1 h-4 bg-brand-primary-200 rounded-full"></div>
-                                    Left Leg (mm)
-                                </h3>
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Proximal
-                                            Femur</label>
-                                        <input type="number" id="left-proximal-femur" oninput="calculateLength()"
-                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-200/20 rounded-2xl bg-brand-bg-300 text-white"
-                                            placeholder="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Distal
-                                            Femur</label>
-                                        <input type="number" id="left-distal-femur" oninput="calculateLength()"
-                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-200/20 rounded-2xl bg-brand-bg-300 text-white"
-                                            placeholder="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Distal
-                                            Tibia</label>
-                                        <input type="number" id="left-distal-tibia" oninput="calculateLength()"
-                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-200/20 rounded-2xl bg-brand-bg-300 text-white"
-                                            placeholder="0">
-                                    </div>
-                                </div>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-3 items-center gap-4">
+                                <div class="text-sm font-semibold text-brand-text-200 pl-4">Proximal Femur</div>
+                                <input type="number" id="right-proximal-femur" oninput="calculateLength()"
+                                    class="block w-full py-3 text-center border-white/5 focus:outline-none focus:ring-4 focus:ring-brand-primary-100/20 rounded-xl transition-all bg-brand-bg-300 text-white"
+                                    placeholder="0">
+                                <input type="number" id="left-proximal-femur" oninput="calculateLength()"
+                                    class="block w-full py-3 text-center border-white/5 focus:outline-none focus:ring-4 focus:ring-brand-primary-100/20 rounded-xl transition-all bg-brand-bg-300 text-white"
+                                    placeholder="0">
+                            </div>
+                            <div class="grid grid-cols-3 items-center gap-4">
+                                <div class="text-sm font-semibold text-brand-text-200 pl-4">Distal Femur</div>
+                                <input type="number" id="right-distal-femur" oninput="calculateLength()"
+                                    class="block w-full py-3 text-center border-white/5 focus:outline-none focus:ring-4 focus:ring-brand-primary-100/20 rounded-xl transition-all bg-brand-bg-300 text-white"
+                                    placeholder="0">
+                                <input type="number" id="left-distal-femur" oninput="calculateLength()"
+                                    class="block w-full py-3 text-center border-white/5 focus:outline-none focus:ring-4 focus:ring-brand-primary-100/20 rounded-xl transition-all bg-brand-bg-300 text-white"
+                                    placeholder="0">
+                            </div>
+                            <div class="grid grid-cols-3 items-center gap-4">
+                                <div class="text-sm font-semibold text-brand-text-200 pl-4">Distal Tibia</div>
+                                <input type="number" id="right-distal-tibia" oninput="calculateLength()"
+                                    class="block w-full py-3 text-center border-white/5 focus:outline-none focus:ring-4 focus:ring-brand-primary-100/20 rounded-xl transition-all bg-brand-bg-300 text-white"
+                                    placeholder="0">
+                                <input type="number" id="left-distal-tibia" oninput="calculateLength()"
+                                    class="block w-full py-3 text-center border-white/5 focus:outline-none focus:ring-4 focus:ring-brand-primary-100/20 rounded-xl transition-all bg-brand-bg-300 text-white"
+                                    placeholder="0">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Results Table -->
-                    <div id="results-card"
-                        class="bg-brand-bg-100 rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-brand-bg-300 border-b border-white/5">
-                                    <th
-                                        class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-brand-text-200">
-                                        Segment</th>
-                                    <th
-                                        class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-brand-text-200 text-center">
-                                        Right (mm)</th>
-                                    <th
-                                        class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-brand-text-200 text-center">
-                                        Left (mm)</th>
-                                    <th
-                                        class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-brand-primary-200 text-right">
-                                        Diff (mm)</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-white/5">
-                                <tr class="hover:bg-white/5 transition-colors">
-                                    <td class="px-6 py-5 text-sm font-bold text-white">Femur</td>
-                                    <td id="right-femur"
-                                        class="px-6 py-5 text-sm font-medium text-brand-text-200 text-center">--</td>
-                                    <td id="left-femur"
-                                        class="px-6 py-5 text-sm font-medium text-brand-text-200 text-center">--</td>
-                                    <td id="femur-diff"
-                                        class="px-6 py-5 text-sm font-bold text-brand-primary-100 text-right">--</td>
-                                </tr>
-                                <tr class="hover:bg-white/5 transition-colors">
-                                    <td class="px-6 py-5 text-sm font-bold text-white">Tibia</td>
-                                    <td id="right-tibia"
-                                        class="px-6 py-5 text-sm font-medium text-brand-text-200 text-center">--</td>
-                                    <td id="left-tibia"
-                                        class="px-6 py-5 text-sm font-medium text-brand-text-200 text-center">--</td>
-                                    <td id="tibia-diff"
-                                        class="px-6 py-5 text-sm font-bold text-brand-primary-100 text-right">--</td>
-                                </tr>
-                                <tr class="bg-brand-primary-100/10">
-                                    <td class="px-6 py-6 text-sm font-extrabold text-white">Total</td>
-                                    <td id="right-total"
-                                        class="px-6 py-6 text-sm font-extrabold text-white text-center">--</td>
-                                    <td id="left-total" class="px-6 py-6 text-sm font-extrabold text-white text-center">
-                                        --</td>
-                                    <td id="total-diff"
-                                        class="px-6 py-6 text-lg font-extrabold text-brand-primary-200 text-right">
-                                        --</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- Calculated Results -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Femur Segment -->
+                        <div class="bg-brand-bg-100 p-6 rounded-[2rem] border border-white/5 space-y-4">
+                            <div class="text-xs font-bold uppercase tracking-widest text-brand-primary-200">Femur (mm)
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm"><span
+                                        class="text-brand-text-200">Right</span><span id="output-right-femur"
+                                        class="text-white font-bold">0.0</span></div>
+                                <div class="flex justify-between text-sm"><span
+                                        class="text-brand-text-200">Left</span><span id="output-left-femur"
+                                        class="text-white font-bold">0.0</span></div>
+                                <div class="flex justify-between text-sm pt-2 border-t border-white/5"><span
+                                        class="text-brand-text-200">Diff</span><span id="discrepancy-femur"
+                                        class="text-brand-primary-100 font-bold">0.0</span></div>
+                            </div>
+                        </div>
+                        <!-- Tibia Segment -->
+                        <div class="bg-brand-bg-100 p-6 rounded-[2rem] border border-white/5 space-y-4">
+                            <div class="text-xs font-bold uppercase tracking-widest text-brand-primary-200">Tibia (mm)
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm"><span
+                                        class="text-brand-text-200">Right</span><span id="output-right-tibia"
+                                        class="text-white font-bold">0.0</span></div>
+                                <div class="flex justify-between text-sm"><span
+                                        class="text-brand-text-200">Left</span><span id="output-left-tibia"
+                                        class="text-white font-bold">0.0</span></div>
+                                <div class="flex justify-between text-sm pt-2 border-t border-white/5"><span
+                                        class="text-brand-text-200">Diff</span><span id="discrepancy-tibia"
+                                        class="text-brand-primary-100 font-bold">0.0</span></div>
+                            </div>
+                        </div>
+                        <!-- Total Length -->
+                        <div
+                            class="bg-brand-primary-100 p-6 rounded-[2rem] text-white shadow-xl shadow-brand-primary-100/20 space-y-4">
+                            <div class="text-xs font-bold uppercase tracking-widest text-brand-primary-300">Total Leg
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm"><span
+                                        class="text-brand-primary-200 font-bold">Right</span><span
+                                        id="output-right-total" class="font-bold">0.0</span></div>
+                                <div class="flex justify-between text-sm"><span
+                                        class="text-brand-primary-200 font-bold">Left</span><span id="output-left-total"
+                                        class="font-bold">0.0</span></div>
+                                <div class="flex justify-between text-sm pt-2 border-t border-white/20"><span
+                                        class="text-brand-primary-200 font-bold">Diff</span><span id="discrepancy-total"
+                                        class="font-extrabold text-[#c6ffe6]">0.0</span></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Reference Image -->
-                    <div class="pt-8 text-center">
-                        <p class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-brand-text-200 mb-6">
-                            Anatomical Landmarks Guide</p>
-                        <div class="inline-block relative group">
-                            <div
-                                class="absolute -inset-1 bg-gradient-to-r from-brand-primary-100 to-brand-accent-100 rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200">
-                            </div>
-                            <img src="../Images/LegLength.png" alt="Leg Length Measurements"
-                                class="relative w-full max-w-lg rounded-[2rem] border border-white/5 shadow-2xl filter brightness-90 contrast-110">
+                    <!-- Anatomical Reference Guide -->
+                    <div class="pt-8 text-center border-t border-white/5">
+                        <p class="text-xs font-bold uppercase tracking-widest text-brand-text-200 mb-6">Anatomical
+                            Landmarks Guide</p>
+                        <div
+                            class="inline-block relative group bg-white/95 rounded-[2.5rem] p-8 shadow-inner border border-white/10">
+                            <img src="Images/LegLength.png" alt="Leg Length Guide"
+                                class="relative w-full max-w-lg transition-all duration-300">
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </main>
 
