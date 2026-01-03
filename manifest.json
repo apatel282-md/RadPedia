@@ -1,0 +1,17 @@
+{
+  "name": "RadPedia",
+  "short_name": "RadPedia",
+  "description": "Radiology Essentials & Calculators",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0284c7",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

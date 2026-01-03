@@ -1,294 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fronto-Occipital Horn Ratio (FOR) Calculator</title>
-<style>
-:root {
-    --primary-blue: #007bff;
-    --light-blue: #e9f5ff;
-    --dark-blue: #0056b3;
-    --text-color: #333;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOR Calculator | RadPedia</title>
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f6;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-}
+    <!-- PWA & iOS Meta Tags -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="RadPedia">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 
-.card-container {
-    width: 100%;
-    max-width: 500px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    margin: 20px;
-    position: relative;
-}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --sab: env(safe-area-inset-bottom);
+        }
 
-h1 {
-    color: var(--dark-blue);
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-    border-bottom: 2px solid var(--light-blue);
-    padding-bottom: 10px;
-}
+        body {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            padding-bottom: calc(85px + var(--sab));
+        }
 
-.input-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-}
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
 
-label {
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 8px;
-}
+        .ios-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(65px + var(--sab));
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: var(--sab);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
 
-input[type="number"] {
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 1em;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-}
+        .ios-tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #94a3b8;
+            text-decoration: none;
+        }
 
-input[type="number"]:focus {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 3px var(--light-blue);
-    outline: none;
-}
+        .ios-tab-item.active {
+            color: #0284c7;
+        }
 
-#results-card {
-    margin-top: 25px;
-    padding: 20px;
-    background-color: var(--light-blue);
-    border-radius: 10px;
-    border-left: 5px solid var(--primary-blue);
-    min-height: 150px;
-    display: block;
-}
+        .ios-tab-icon {
+            width: 24px;
+            height: 24px;
+        }
 
-.result-item {
-    margin-bottom: 12px;
-    padding: 8px;
-    border-bottom: 1px dashed #c0d8f0;
-}
-
-.result-label {
-    font-weight: 500;
-    color: var(--dark-blue);
-    display: inline-block;
-    width: 180px;
-}
-
-.result-value {
-    font-weight: bold;
-    font-size: 1.5em;
-    color: var(--primary-blue);
-}
-
-.reference-table {
-    margin-top: 15px;
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-}
-
-.reference-table th,
-.reference-table td {
-    border: 1px solid #c0d8f0;
-    padding: 8px;
-    font-weight: 600;
-}
-
-.reference-table th {
-    background-color: var(--primary-blue);
-    color: white;
-}
-
-.thumbnail-container {
-    text-align: center;
-    margin-top: 25px;
-    padding-top: 15px;
-    border-top: 1px solid var(--light-blue);
-}
-
-#reference-thumbnail {
-    width: 100%;
-    height: auto;
-    cursor: zoom-in;
-    transition: transform 0.2s ease-in-out;
-}
-
-#reference-thumbnail:hover {
-    transform: scale(1.1);
-}
-
-.thumbnail-text {
-    font-size: 0.85em;
-    color: #666;
-    margin-top: 8px;
-    display: block;
-}
-
-.modal-overlay {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.8);
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(5px);
-}
-
-.modal-content {
-    position: relative;
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-    max-width: 90%;
-    max-height: 90%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.modal-content img {
-    max-width: 100%;
-    max-height: 80vh;
-    display: block;
-    border-radius: 8px;
-}
-
-.close-button {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 35px;
-    font-weight: bold;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-    line-height: 1;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: #333;
-    text-decoration: none;
-    outline: none;
-}
-</style>
+        .ios-tab-label {
+            font-size: 10px;
+            font-weight: 600;
+        }
+    </style>
 </head>
-<body>
-<div class="card-container">
-    <h1>Fronto-Occipital Horn Ratio (FOR) Calculator</h1>
-    <p>Enter diameters (mm) to calculate the FOR value.</p>
-    <hr>
 
-    <div class="input-group">
-        <label for="frontal-diameter">Frontal Horn Diameter (mm):</label>
-        <input type="number" id="frontal-diameter" inputmode="decimal" oninput="calculateFOR()">
-    </div>
-    <div class="input-group">
-        <label for="interparietal-diameter">Interparietal Diameter (mm):</label>
-        <input type="number" id="interparietal-diameter" inputmode="decimal" oninput="calculateFOR()">
-    </div>
-    <div class="input-group">
-        <label for="occipital-diameter">Occipital Horn Diameter (mm):</label>
-        <input type="number" id="occipital-diameter" inputmode="decimal" oninput="calculateFOR()">
-    </div>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
 
-    <div id="results-card">
-        <div class="result-item">
-            <span class="result-label">Calculated FOR:</span>
-            <span class="result-value" id="for-output">--</span>
+    <!-- Navigation -->
+    <nav class="glass sticky top-0 z-50 border-b border-slate-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="../index.html" class="flex items-center gap-2 group">
+                    <div
+                        class="w-8 h-8 bg-medical-600 rounded-lg flex items-center justify-center text-white font-display font-bold text-lg shadow-lg shadow-medical-200 transition-transform group-hover:scale-110">
+                        R</div>
+                    <span class="text-xl font-display font-bold tracking-tight text-slate-800">RadPedia</span>
+                </a>
+                <a href="../index.html"
+                    class="text-sm font-medium text-slate-600 hover:text-medical-600 transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Dashboard
+                </a>
+            </div>
         </div>
+    </nav>
 
-        <table class="reference-table">
-            <thead>
-                <tr>
-                    <th>Severity</th>
-                    <th>FOR Range</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Mild Ventriculomegaly</td>
-                    <td>0.36 – 0.54</td>
-                </tr>
-                <tr>
-                    <td>Moderate Ventriculomegaly</td>
-                    <td>0.42 – 0.67</td>
-                </tr>
-                <tr>
-                    <td>Severe Ventriculomegaly</td>
-                    <td>0.55 – 0.75</td>
-                </tr>
-            </tbody>
-        </table>
+    <main class="flex-grow py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-xl mx-auto">
+            <div
+                class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden">
+                <div class="px-8 pt-10 pb-6 border-b border-slate-50 text-center">
+                    <h1 class="text-3xl font-display font-extrabold text-slate-900">FOR Calculator</h1>
+                    <p class="mt-2 text-slate-500 text-sm">Fronto-Occipital Horn Ratio for ventricular assessment.</p>
+                </div>
+
+                <div class="p-8 space-y-6">
+                    <!-- Inputs -->
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label for="frontal-diameter"
+                                class="block text-sm font-bold text-slate-700 mb-2 ml-1">Frontal Horn Diameter
+                                (mm)</label>
+                            <input type="number" id="frontal-diameter" oninput="calculateFOR()"
+                                class="block w-full px-4 py-4 text-base border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-2xl transition-all bg-slate-50"
+                                placeholder="e.g. 12.5">
+                        </div>
+                        <div>
+                            <label for="interparietal-diameter"
+                                class="block text-sm font-bold text-slate-700 mb-2 ml-1">Interparietal Diameter
+                                (mm)</label>
+                            <input type="number" id="interparietal-diameter" oninput="calculateFOR()"
+                                class="block w-full px-4 py-4 text-base border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-2xl transition-all bg-slate-50"
+                                placeholder="e.g. 85.0">
+                        </div>
+                        <div>
+                            <label for="occipital-diameter"
+                                class="block text-sm font-bold text-slate-700 mb-2 ml-1">Occipital Horn Diameter
+                                (mm)</label>
+                            <input type="number" id="occipital-diameter" oninput="calculateFOR()"
+                                class="block w-full px-4 py-4 text-base border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-2xl transition-all bg-slate-50"
+                                placeholder="e.g. 14.2">
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="results-card" class="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div class="bg-medical-50 rounded-3xl p-6 border border-medical-100">
+                            <div class="bg-medical-600 rounded-2xl p-6 text-center shadow-lg shadow-medical-200 mb-6">
+                                <span
+                                    class="block text-medical-100 text-xs font-bold uppercase tracking-widest mb-2">Calculated
+                                    FOR</span>
+                                <span id="for-output" class="text-white text-4xl font-display font-bold">--</span>
+                            </div>
+
+                            <!-- Reference Table -->
+                            <div class="overflow-hidden rounded-2xl border border-medical-200/50 bg-white">
+                                <table class="w-full text-sm text-left">
+                                    <thead
+                                        class="bg-medical-100/50 text-medical-800 uppercase text-[10px] font-bold tracking-wider">
+                                        <tr>
+                                            <th class="px-4 py-3">Severity</th>
+                                            <th class="px-4 py-3 text-right">FOR Range</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-50">
+                                        <tr class="hover:bg-slate-50 transition-colors">
+                                            <td class="px-4 py-3 font-medium text-slate-700">Mild Ventriculomegaly</td>
+                                            <td class="px-4 py-3 text-right text-medical-600 font-bold">0.36 – 0.54</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50 transition-colors">
+                                            <td class="px-4 py-3 font-medium text-slate-700">Moderate Ventriculomegaly
+                                            </td>
+                                            <td class="px-4 py-3 text-right text-medical-600 font-bold">0.42 – 0.67</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50 transition-colors">
+                                            <td class="px-4 py-3 font-medium text-slate-700">Severe Ventriculomegaly
+                                            </td>
+                                            <td class="px-4 py-3 text-right text-medical-600 font-bold">0.55 – 0.75</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reference Image -->
+                    <div class="pt-6 border-t border-slate-100 text-center">
+                        <button onclick="openModal()"
+                            class="group relative overflow-hidden rounded-2xl border border-slate-200 transition-all hover:border-medical-300">
+                            <img src="Images/FOR.png" alt="FOR Reference"
+                                class="w-full opacity-60 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105">
+                            <div
+                                class="absolute inset-0 bg-slate-900/0 flex items-center justify-center transition-all group-hover:bg-slate-900/20">
+                                <div
+                                    class="bg-white/90 px-4 py-2 rounded-full text-xs font-bold shadow-sm opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all">
+                                    View Measurement Guide</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="image-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/90 backdrop-blur-sm">
+        <div class="relative max-w-4xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl">
+            <button onclick="closeModal()"
+                class="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-colors z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+            <div class="p-2 overflow-auto max-h-[85vh]">
+                <img src="Images/FOR.png" alt="FOR Measurement Guide" class="w-full rounded-2xl">
+            </div>
+        </div>
     </div>
 
-    <div class="thumbnail-container">
-        <span class="thumbnail-text">Click to view reference image:</span>
-        <img src="Images/FOR.png" alt="FOR Reference Image" id="reference-thumbnail">
-    </div>
-</div>
+    <footer class="py-12 text-center border-t border-slate-100 mt-12 bg-white">
+        <p class="text-slate-400 text-xs">© 2026 RadPedia. Reference data curated for clinical guidance.</p>
+    </footer>
 
-<div id="image-modal" class="modal-overlay">
-    <div class="modal-content">
-        <button class="close-button" id="close-modal-button">&times;</button>
-        <img src="Images/FOR.png" alt="FOR Reference Full Size" id="full-size-image">
-    </div>
-</div>
+    <!-- iOS style Bottom Navigation -->
+    <nav class="ios-tab-bar">
+        <a href="../index.html" class="ios-tab-item">
+            <svg class="ios-tab-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            <span class="ios-tab-label">Home</span>
+        </a>
+        <a href="liverspleenlength.html" class="ios-tab-item active">
+            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <span class="ios-tab-label">Tools</span>
+        </a>
+        <a href="mailto:support@radpedia.com" class="ios-tab-item">
+            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <span class="ios-tab-label">Support</span>
+        </a>
+    </nav>
 
-<script>
-function calculateFOR() {
-    const frontal = parseFloat(document.getElementById('frontal-diameter').value);
-    const interparietal = parseFloat(document.getElementById('interparietal-diameter').value);
-    const occipital = parseFloat(document.getElementById('occipital-diameter').value);
+    <script>
+        function calculateFOR() {
+            const frontal = parseFloat(document.getElementById('frontal-diameter').value);
+            const interparietal = parseFloat(document.getElementById('interparietal-diameter').value);
+            const occipital = parseFloat(document.getElementById('occipital-diameter').value);
+            const forOutput = document.getElementById('for-output');
 
-    const forOutput = document.getElementById('for-output');
+            if (isNaN(frontal) || isNaN(occipital) || isNaN(interparietal) || interparietal === 0) {
+                forOutput.textContent = "--";
+                return;
+            }
 
-    if (isNaN(frontal) || isNaN(occipital) || isNaN(interparietal) || interparietal === 0) {
-        forOutput.textContent = "--";
-        return;
-    }
+            const forValue = (frontal + occipital) / (2 * interparietal);
+            forOutput.textContent = forValue.toFixed(2);
+        }
 
-    const forValue = (frontal + occipital) / (2 * interparietal);
-    forOutput.textContent = forValue.toFixed(2);
-}
+        function openModal() {
+            document.getElementById('image-modal').classList.replace('hidden', 'flex');
+        }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const thumbnail = document.getElementById('reference-thumbnail');
-    const modal = document.getElementById('image-modal');
-    const closeModalButton = document.getElementById('close-modal-button');
+        function closeModal() {
+            document.getElementById('image-modal').classList.replace('flex', 'hidden');
+        }
 
-    thumbnail.onclick = () => modal.style.display = "flex";
-    closeModalButton.onclick = () => modal.style.display = "none";
-    window.onclick = (event) => { if (event.target == modal) modal.style.display = "none"; };
-});
-</script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.onclick = (e) => { if (e.target.id === 'image-modal') closeModal(); };
+        });
+    </script>
 </body>
+
 </html>

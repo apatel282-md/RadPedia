@@ -1,350 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leg Length Calculator</title>
+    <title>Leg Length Calculator | RadPedia</title>
+
+    <!-- PWA & iOS Meta Tags -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="RadPedia">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
     <style>
         :root {
-            --primary-color: #3b82f6; /* Tailwind blue-500 */
-            --header-bg: #eff6ff;     /* Tailwind blue-50 */
-            --input-bg: #ffffff;
-            --output-bg: #f3f4f6;     /* Tailwind gray-100 */
-            --error-color: #ef4444;   /* Tailwind red-500 */
-            --warning-color: #f59e0b; /* Tailwind amber-500 */
-            --border-color: #e5e7eb;  /* Tailwind gray-200 */
+            --sab: env(safe-area-inset-bottom);
         }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f9fafb;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            padding-bottom: calc(85px + var(--sab));
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .ios-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(65px + var(--sab));
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: var(--sab);
             display: flex;
-            justify-content: center;
-            padding: 20px;
-            margin: 0;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
         }
-        .calculator-wrapper {
-            max-width: 900px; /* Increased max width slightly for new column */
-            width: 100%;
-            padding: 30px;
-            background-color: var(--input-bg);
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+
+        .ios-tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #94a3b8;
+            text-decoration: none;
         }
-        /* New H1 Style for the main title */
-        .main-title {
-            color: var(--primary-color);
-            font-size: 2rem;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 5px;
-            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+
+        .ios-tab-item.active {
+            color: #0284c7;
         }
-        h2 {
-            color: #1f2937; /* Tailwind gray-900 */
-            font-size: 1.5rem;
+
+        .ios-tab-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .ios-tab-label {
+            font-size: 10px;
             font-weight: 600;
-            margin-top: 20px;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
-            border-bottom: 2px solid var(--border-color);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            overflow: hidden; 
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            border: 1px solid var(--border-color);
-            padding: 12px 10px;
-            text-align: center;
-        }
-        th {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-        }
-        td:first-child {
-            text-align: left;
-            font-weight: 500;
-            background-color: var(--header-bg);
-            color: #1f2937;
-        }
-        .input-row td:not(:first-child) {
-            background-color: var(--input-bg);
-        }
-        .output-row td:not(:first-child) {
-            background-color: var(--output-bg);
-            font-weight: 600;
-        }
-        .input-field {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            text-align: center;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            transition: border-color 0.2s;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-        }
-        /* New styles for placeholder */
-        .input-field::placeholder {
-            color: #9ca3af; /* Light gray color */
-            opacity: 1; /* For Firefox */
-        }
-        .input-field:focus::placeholder {
-            color: transparent; /* Makes placeholder invisible when focused */
-        }
-        
-        .error {
-            color: var(--error-color);
-            font-weight: 800;
-        }
-        .discrepancy {
-            font-weight: 700;
-        }
-        .total-discrepancy {
-            font-size: 1.1rem;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 12px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background-color 0.2s, box-shadow 0.2s;
-            margin-bottom: 20px;
-        }
-        button:hover {
-            background-color: #2563eb; /* Tailwind blue-600 */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        #image-placeholder {
-            margin-top: 30px;
-            padding: 25px;
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            text-align: center;
-            background-color: var(--output-bg);
-            color: #6b7280;
-            font-style: italic;
-        }
-        #image-placeholder img {
-            max-width: 100%;
-            height: auto;
-            display: block; /* Remove extra space below image */
-            margin: 0 auto; /* Center the image */
-            border-radius: 4px; /* Slightly rounded corners for the image */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for the image */
         }
     </style>
 </head>
-<body>
 
-    <div class="calculator-wrapper">
-        <!-- New Main Title -->
-        <h1 class="main-title">Leg Length Calculator</h1>
-        
-        <!-- Input Section --><h2>📏 Measurement Input (cm)</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Anatomical Mark</th>
-                    <th>Right</th>
-                    <th>Left</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="input-row">
-                    <!-- Changed value="0" to placeholder="0" -->
-                    <td>Proximal Femur Mark</td>
-                    <td><input type="number" id="right-proximal-femur" inputmode="decimal" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
-                    <td><input type="number" id="left-proximal-femur" inputmode="decimal" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
-                </tr>
-                <tr class="input-row">
-                    <!-- Changed value="0" to placeholder="0" -->
-                    <td>Distal Femur Mark</td>
-                    <td><input type="number" id="right-distal-femur" inputmode="decimal" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
-                    <td><input type="number" id="left-distal-femur" inputmode="decimal" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
-                </tr>
-                <tr class="input-row">
-                    <!-- Changed value="0" to placeholder="0" -->
-                    <td>Distal Tibia Mark</td>
-                    <td><input type="number" id="right-distal-tibia" inputmode="decimal" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
-                    <td><input type="number" id="left-distal-tibia" inputmode="decimal" class="input-field" placeholder="0" min="0" oninput="calculateLength()"></td>
-                </tr>
-            </tbody>
-        </table>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
 
-        <button onclick="calculateLength()">Recalculate (Optional)</button>
-        
-        <!-- Unified Output Section --><h2>✅ Calculated Segment Lengths and Discrepancy (cm)</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Segment</th>
-                    <th>Right Length (cm)</th>
-                    <th>Left Length (cm)</th>
-                    <th>Difference (R - L) (cm)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="output-row">
-                    <td>Femur Length</td>
-                    <td id="output-right-femur" class="output-field">0.0</td>
-                    <td id="output-left-femur" class="output-field">0.0</td>
-                    <td id="discrepancy-femur" class="discrepancy output-field">0.0</td>
-                </tr>
-                <tr class="output-row">
-                    <td>Tibia Length</td>
-                    <td id="output-right-tibia" class="output-field">0.0</td>
-                    <td id="output-left-tibia" class="output-field">0.0</td>
-                    <td id="discrepancy-tibia" class="discrepancy output-field">0.0</td>
-                </tr>
-                <tr class="output-row">
-                    <td style="font-weight: 700;">Total Leg Length</td>
-                    <td id="output-right-total" class="output-field" style="font-weight: 700;">0.0</td>
-                    <td id="output-left-total" class="output-field" style="font-weight: 700;">0.0</td>
-                    <td id="discrepancy-total" class="discrepancy total-discrepancy output-field">0.0</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <!-- Image Placeholder with your image --><div id="image-placeholder">
-            <p>Anatomical Reference:</p>
-            <img src="Images/leglength.png" alt="Reference image showing anatomical marks for leg length measurement">
+    <!-- Navigation -->
+    <nav class="glass sticky top-0 z-50 border-b border-slate-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="../index.html" class="flex items-center gap-2 group">
+                    <div
+                        class="w-8 h-8 bg-medical-600 rounded-lg flex items-center justify-center text-white font-display font-bold text-lg shadow-lg shadow-medical-200 transition-transform group-hover:scale-110">
+                        R</div>
+                    <span class="text-xl font-display font-bold tracking-tight text-slate-800">RadPedia</span>
+                </a>
+                <a href="../index.html"
+                    class="text-sm font-medium text-slate-600 hover:text-medical-600 transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Dashboard
+                </a>
+            </div>
         </div>
-    </div>
+    </nav>
+
+    <main class="flex-grow py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto">
+            <div
+                class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden">
+                <div class="px-8 pt-10 pb-6 border-b border-slate-50 text-center">
+                    <h1 class="text-3xl font-display font-extrabold text-slate-900">Leg Length Calculator</h1>
+                    <p class="mt-2 text-slate-500 text-sm">Analyze limb length discrepancies and segment measurements.
+                    </p>
+                </div>
+
+                <div class="p-8 space-y-10">
+                    <!-- Input Section -->
+                    <div>
+                        <h2 class="text-lg font-display font-bold text-slate-800 mb-6 flex items-center gap-2">
+                            <div class="w-2 h-6 bg-medical-500 rounded-full"></div>
+                            Measurement Input (cm)
+                        </h2>
+                        <div class="overflow-hidden rounded-3xl border border-slate-100 bg-slate-50 p-6">
+                            <div
+                                class="grid grid-cols-3 gap-6 mb-4 font-bold text-xs uppercase tracking-widest text-slate-400">
+                                <div class="col-span-1 pl-4">Mark</div>
+                                <div class="text-center">Right</div>
+                                <div class="text-center">Left</div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-3 items-center gap-4">
+                                    <div class="text-sm font-semibold text-slate-600 pl-4">Proximal Femur</div>
+                                    <input type="number" id="right-proximal-femur" oninput="calculateLength()"
+                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
+                                        placeholder="0">
+                                    <input type="number" id="left-proximal-femur" oninput="calculateLength()"
+                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
+                                        placeholder="0">
+                                </div>
+                                <div class="grid grid-cols-3 items-center gap-4">
+                                    <div class="text-sm font-semibold text-slate-600 pl-4">Distal Femur</div>
+                                    <input type="number" id="right-distal-femur" oninput="calculateLength()"
+                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
+                                        placeholder="0">
+                                    <input type="number" id="left-distal-femur" oninput="calculateLength()"
+                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
+                                        placeholder="0">
+                                </div>
+                                <div class="grid grid-cols-3 items-center gap-4">
+                                    <div class="text-sm font-semibold text-slate-600 pl-4">Distal Tibia</div>
+                                    <input type="number" id="right-distal-tibia" oninput="calculateLength()"
+                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
+                                        placeholder="0">
+                                    <input type="number" id="left-distal-tibia" oninput="calculateLength()"
+                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
+                                        placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Output Section -->
+                    <div id="results-container" class="space-y-6">
+                        <h2 class="text-lg font-display font-bold text-slate-800 flex items-center gap-2">
+                            <div class="w-2 h-6 bg-medical-500 rounded-full"></div>
+                            Calculated Results (cm)
+                        </h2>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Femur -->
+                            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-100 space-y-4">
+                                <div class="text-xs font-bold uppercase tracking-widest text-medical-600">Femur</div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-sm"><span
+                                            class="text-slate-500">Right</span><span id="output-right-femur"
+                                            class="font-bold">0.0</span></div>
+                                    <div class="flex justify-between text-sm"><span
+                                            class="text-slate-500">Left</span><span id="output-left-femur"
+                                            class="font-bold">0.0</span></div>
+                                    <div class="flex justify-between text-sm pt-2 border-t border-slate-200"><span
+                                            class="text-slate-500">Diff</span><span id="discrepancy-femur"
+                                            class="font-bold text-medical-600">0.0</span></div>
+                                </div>
+                            </div>
+                            <!-- Tibia -->
+                            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-100 space-y-4">
+                                <div class="text-xs font-bold uppercase tracking-widest text-medical-600">Tibia</div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-sm"><span
+                                            class="text-slate-500">Right</span><span id="output-right-tibia"
+                                            class="font-bold">0.0</span></div>
+                                    <div class="flex justify-between text-sm"><span
+                                            class="text-slate-500">Left</span><span id="output-left-tibia"
+                                            class="font-bold">0.0</span></div>
+                                    <div class="flex justify-between text-sm pt-2 border-t border-slate-200"><span
+                                            class="text-slate-500">Diff</span><span id="discrepancy-tibia"
+                                            class="font-bold text-medical-600">0.0</span></div>
+                                </div>
+                            </div>
+                            <!-- Total -->
+                            <div
+                                class="bg-medical-600 p-6 rounded-[2rem] text-white shadow-xl shadow-medical-200 space-y-4">
+                                <div class="text-xs font-bold uppercase tracking-widest text-medical-100">Total Leg
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-sm"><span
+                                            class="text-medical-200">Right</span><span id="output-right-total"
+                                            class="font-bold">0.0</span></div>
+                                    <div class="flex justify-between text-sm"><span
+                                            class="text-medical-200">Left</span><span id="output-left-total"
+                                            class="font-bold">0.0</span></div>
+                                    <div class="flex justify-between text-sm pt-2 border-t border-medical-500/50"><span
+                                            class="text-medical-200">Diff</span><span id="discrepancy-total"
+                                            class="font-bold text-yellow-300">0.0</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Anatomical Reference -->
+                    <div class="pt-8 border-t border-slate-100">
+                        <p class="text-center text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">
+                            Anatomical Reference Guide</p>
+                        <div class="bg-slate-50 rounded-3xl p-4 border border-slate-100">
+                            <img src="Images/leglength.png" alt="Anatomical marks Guide"
+                                class="w-full rounded-2xl mix-blend-multiply opacity-80">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-12 text-center border-t border-slate-100 mt-12 bg-white">
+        <p class="text-slate-400 text-xs">© 2026 RadPedia. Reference data curated for clinical guidance.</p>
+    </footer>
+
+    <!-- iOS style Bottom Navigation -->
+    <nav class="ios-tab-bar">
+        <a href="../index.html" class="ios-tab-item">
+            <svg class="ios-tab-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            <span class="ios-tab-label">Home</span>
+        </a>
+        <a href="liverspleenlength.html" class="ios-tab-item active">
+            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <span class="ios-tab-label">Tools</span>
+        </a>
+        <a href="mailto:support@radpedia.com" class="ios-tab-item">
+            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <span class="ios-tab-label">Support</span>
+        </a>
+    </nav>
 
     <script>
         function calculateLength() {
-            // Helper function to safely get input values
             function getInputValue(id) {
-                // Now that we use placeholder, an empty string means the user hasn't typed anything.
-                // parseFloat("") returns NaN, which is correctly handled by the isNaN check below.
                 const value = parseFloat(document.getElementById(id).value);
-                
-                // Return 0 if the input is not a valid number (i.e., empty string or NaN) or is negative
                 return (isNaN(value) || value < 0) ? 0 : value;
             }
 
-            // Get all input marks (cm)
             const R_PF = getInputValue('right-proximal-femur');
             const R_DF = getInputValue('right-distal-femur');
             const R_DT = getInputValue('right-distal-tibia');
-            
             const L_PF = getInputValue('left-proximal-femur');
             const L_DF = getInputValue('left-distal-femur');
             const L_DT = getInputValue('left-distal-tibia');
 
-            // --- 1. Calculate Segment Lengths ---
-            
-            // Femur Length = Proximal Femur Mark - Distal Femur Mark
             const R_Femur = R_PF - R_DF;
             const L_Femur = L_PF - L_DF;
-
-            // Tibia Length = Distal Femur Mark - Distal Tibia Mark
             const R_Tibia = R_DF - R_DT;
             const L_Tibia = L_DF - L_DT;
-            
-            // Total Length = Femur Length + Tibia Length
             const R_Total = R_Femur + R_Tibia;
             const L_Total = L_Femur + L_Tibia;
 
-            // --- 2. Check for Calculation Errors (Distal mark > Proximal mark) and format ---
-            
             function formatOutput(length) {
-                // Return 'ERROR!' if the length is non-physical (negative)
-                if (length < 0) {
-                    return 'ERROR!';
-                }
-                // Return a fixed 1-decimal-place string
-                return length.toFixed(1);
-            }
-            
-            const R_Femur_Out = formatOutput(R_Femur);
-            const L_Femur_Out = formatOutput(L_Femur);
-            const R_Tibia_Out = formatOutput(R_Tibia);
-            const L_Tibia_Out = formatOutput(L_Tibia);
-            const R_Total_Out = formatOutput(R_Total);
-            const L_Total_Out = formatOutput(L_Total);
-
-            // --- 3. Update Output Table and apply error styling ---
-            
-            function updateOutput(id, content, value) {
-                const element = document.getElementById(id);
-                element.textContent = content;
-                // Apply the error class if the content is 'ERROR!'
-                if (content === 'ERROR!') {
-                    element.classList.add('error');
-                } else {
-                    element.classList.remove('error');
-                }
+                return length < 0 ? 'ERR' : length.toFixed(1);
             }
 
-            updateOutput('output-right-femur', R_Femur_Out, R_Femur);
-            updateOutput('output-left-femur', L_Femur_Out, L_Femur);
-            updateOutput('output-right-tibia', R_Tibia_Out, R_Tibia);
-            updateOutput('output-left-tibia', L_Tibia_Out, L_Tibia);
-            updateOutput('output-right-total', R_Total_Out, R_Total);
-            updateOutput('output-left-total', L_Total_Out, L_Total);
+            document.getElementById('output-right-femur').textContent = formatOutput(R_Femur);
+            document.getElementById('output-left-femur').textContent = formatOutput(L_Femur);
+            document.getElementById('output-right-tibia').textContent = formatOutput(R_Tibia);
+            document.getElementById('output-left-tibia').textContent = formatOutput(L_Tibia);
+            document.getElementById('output-right-total').textContent = formatOutput(R_Total);
+            document.getElementById('output-left-total').textContent = formatOutput(L_Total);
 
-
-            // --- 4. Calculate and Update Discrepancies ---
-            
-            function calculateDiscrepancy(right, left) {
-                // Only calculate if both base lengths are valid (>= 0)
+            function setDiff(id, right, left) {
+                const el = document.getElementById(id);
                 if (right < 0 || left < 0) {
-                    return 'N/A';
+                    el.textContent = 'N/A';
+                } else {
+                    const diff = right - left;
+                    el.textContent = diff.toFixed(1);
                 }
-                const difference = right - left;
-                return difference.toFixed(1);
             }
 
-            const Femur_Disc = calculateDiscrepancy(R_Femur, L_Femur);
-            const Tibia_Disc = calculateDiscrepancy(R_Tibia, L_Tibia);
-            const Total_Disc = calculateDiscrepancy(R_Total, L_Total);
-
-            // Update merged columns using the same IDs
-            document.getElementById('discrepancy-femur').textContent = Femur_Disc;
-            document.getElementById('discrepancy-tibia').textContent = Tibia_Disc;
-            document.getElementById('discrepancy-total').textContent = Total_Disc;
-            
-            // Set discrepancy color based on value (Red for non-zero discrepancy, normal for zero)
-            const totalDiscEl = document.getElementById('discrepancy-total');
-            const totalDiscValue = parseFloat(Total_Disc);
-
-            if (isNaN(totalDiscValue)) {
-                 // Do nothing if it's 'N/A'
-                 totalDiscEl.style.color = '#1f2937';
-            } else if (totalDiscValue !== 0) {
-                // Highlight non-zero discrepancies in red
-                totalDiscEl.style.color = 'var(--error-color)';
-            } else {
-                // Normal color for zero discrepancy
-                totalDiscEl.style.color = '#1f2937';
-            }
-
+            setDiff('discrepancy-femur', R_Femur, L_Femur);
+            setDiff('discrepancy-tibia', R_Tibia, L_Tibia);
+            setDiff('discrepancy-total', R_Total, L_Total);
         }
-        
-        // Run the calculation on page load to initialize outputs
+
         document.addEventListener('DOMContentLoaded', calculateLength);
     </script>
-
 </body>
+
 </html>

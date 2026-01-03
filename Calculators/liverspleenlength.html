@@ -1,468 +1,450 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liver and Spleen Length Reference Values</title>
+    <title>Liver & Spleen Reference | RadPedia</title>
+
+    <!-- PWA & iOS Meta Tags -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="RadPedia">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
     <style>
         :root {
-            --primary-blue: #007bff;
-            --dark-primary-blue: #004a99; /* Darker blue for suggested limits background */
-            --light-blue: #e9f5ff;
-            --dark-blue: #0056b3;
-            --text-color: #333;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
+            --sab: env(safe-area-inset-bottom);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            padding-bottom: calc(85px + var(--sab));
         }
 
-        .card-container {
-            width: 100%;
-            max-width: 500px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin: 20px;
-            position: relative;
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        h1 {
-            color: var(--dark-blue);
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.8em;
-            border-bottom: 2px solid var(--light-blue);
-            padding-bottom: 10px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 8px;
-        }
-
-        select, input[type="number"] {
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        select:focus, input[type="number"]:focus {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px var(--light-blue);
-            outline: none;
-        }
-
-        /* Toggle Button Styles */
-        .toggle-group {
-            display: flex;
-        }
-
-        .toggle-button {
-            flex-grow: 1;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            font-size: 1.2em; /* Increased font size for organ selection */
-            font-weight: 600;
-            transition: all 0.3s ease;
-            background-color: #e9e9e9;
-            color: var(--text-color);
-            border-radius: 0;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .toggle-button.active {
-            background-color: var(--primary-blue);
-            color: white;
-            border-color: var(--dark-blue);
-            z-index: 2;
-        }
-
-        .toggle-button:first-child {
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 8px;
-            border-right: none;
-        }
-
-        .toggle-button:last-child {
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-            margin-left: -1px;
-        }
-
-        .toggle-button:hover:not(.active) {
-            background-color: #d0d0d0;
-        }
-
-        #results-card {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: var(--light-blue);
-            border-radius: 10px;
-            border-left: 5px solid var(--primary-blue);
-            min-height: 140px;
-        }
-
-        .result-item {
-            margin-bottom: 12px;
-            padding: 8px;
-            border-bottom: 1px dashed #c0d8f0;
-        }
-
-        .result-label {
-            font-weight: 500;
-            color: var(--dark-blue);
-            display: inline-block;
-            width: 150px;
-        }
-
-        .result-value {
-            font-weight: bold;
-            color: var(--text-color);
-        }
-
-        .final-normal-range {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: var(--dark-primary-blue);
-            color: white;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 1.1em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .final-normal-range .result-label {
-            color: white;
-            width: auto;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .final-normal-range .result-value {
-            color: var(--warning-color);
-            font-size: 1.5em;
-        }
-
-        .error-message {
-            color: var(--danger-color);
-            margin-top: 15px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .thumbnail-container {
-            text-align: center;
-            margin-top: 25px;
-            padding-top: 15px;
-            border-top: 1px solid var(--light-blue);
-        }
-
-        #reference-thumbnail {
-            width: 100%;
-            height: auto;
-            cursor: zoom-in;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        #reference-thumbnail:hover {
-            transform: scale(1.05);
-        }
-
-        .thumbnail-text {
-            font-size: 0.85em;
-            color: #666;
-            margin-top: 8px;
-            display: block;
-        }
-
-        .modal-overlay {
-            display: none;
+        .ios-tab-bar {
             position: fixed;
-            z-index: 1000;
+            bottom: 0;
             left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            position: relative;
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2),0 6px 20px rgba(0,0,0,0.19);
-            max-width: 90%;
-            max-height: 90%;
+            right: 0;
+            height: calc(65px + var(--sab));
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: var(--sab);
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
             align-items: center;
+            z-index: 1000;
+        }
+
+        .ios-tab-item {
+            display: flex;
             flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #94a3b8;
+            text-decoration: none;
         }
 
-        .modal-content img {
-            max-width: 100%;
-            max-height: 80vh;
-            display: block;
-            border-radius: 8px;
+        .ios-tab-item.active {
+            color: #0284c7;
         }
 
-        .close-button {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 0;
-            line-height: 1;
+        .ios-tab-icon {
+            width: 24px;
+            height: 24px;
         }
 
-        .close-button:hover,
-        .close-button:focus {
-            color: #333;
-            outline: none;
+        .ios-tab-label {
+            font-size: 10px;
+            font-weight: 600;
         }
     </style>
 </head>
-<body>
 
-<div class="card-container">
-    <h1>Liver and Spleen Length Reference Values</h1>
-    <p>Select organ, reference method, and a range to view the normal limits.</p>
-    <hr>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
 
-    <div class="input-group">
-        <label>Choose Organ:</label>
-        <div class="toggle-group">
-            <button id="organ-spleen" class="toggle-button active" onclick="setOrgan('spleen')">Spleen</button>
-            <button id="organ-liver" class="toggle-button" onclick="setOrgan('liver')">Liver</button>
+    <!-- Navigation -->
+    <nav class="glass sticky top-0 z-50 border-b border-slate-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="../index.html" class="flex items-center gap-2 group">
+                    <div
+                        class="w-8 h-8 bg-medical-600 rounded-lg flex items-center justify-center text-white font-display font-bold text-lg shadow-lg shadow-medical-200 transition-transform group-hover:scale-110">
+                        R</div>
+                    <span class="text-xl font-display font-bold tracking-tight text-slate-800">RadPedia</span>
+                </a>
+                <a href="../index.html"
+                    class="text-sm font-medium text-slate-600 hover:text-medical-600 transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-xl mx-auto">
+            <div
+                class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden">
+                <div class="px-8 pt-10 pb-6 border-b border-slate-50">
+                    <h1 class="text-3xl font-display font-extrabold text-slate-900 text-center">Liver & Spleen Reference
+                    </h1>
+                    <p class="mt-2 text-slate-500 text-center text-sm">Select organ and reference parameters to view
+                        normal limits.</p>
+                </div>
+
+                <div class="p-8 space-y-8">
+                    <!-- Organ Selection -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-3 ml-1 tracking-wide uppercase">Select
+                            Organ</label>
+                        <div class="grid grid-cols-2 gap-3 p-1 bg-slate-100 rounded-2xl">
+                            <button id="organ-spleen" onclick="setOrgan('spleen')"
+                                class="py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 bg-white text-medical-600 shadow-sm">Spleen</button>
+                            <button id="organ-liver" onclick="setOrgan('liver')"
+                                class="py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 text-slate-500 hover:bg-white/50">Liver</button>
+                        </div>
+                    </div>
+
+                    <!-- Reference Type -->
+                    <div>
+                        <label
+                            class="block text-sm font-bold text-slate-700 mb-3 ml-1 tracking-wide uppercase">Reference
+                            Type</label>
+                        <div class="grid grid-cols-2 gap-3 p-1 bg-slate-100 rounded-2xl">
+                            <button id="ref-age" onclick="setReferenceTypeAndToggle('age')"
+                                class="py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 bg-white text-medical-600 shadow-sm">Age
+                                Range</button>
+                            <button id="ref-height" onclick="setReferenceTypeAndToggle('height')"
+                                class="py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 text-slate-500 hover:bg-white/50">Height
+                                Range</button>
+                        </div>
+                        <input type="hidden" id="reference-type" value="age">
+                    </div>
+
+                    <!-- Select Multi-group -->
+                    <div class="space-y-6">
+                        <div id="age-select-group">
+                            <label for="age-select" class="block text-sm font-bold text-slate-700 mb-2 ml-1">Age Range
+                                Selection</label>
+                            <div class="relative">
+                                <select id="age-select" onchange="getMeasurements()"
+                                    class="block w-full pl-4 pr-10 py-4 text-base border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-2xl transition-all appearance-none bg-slate-50">
+                                </select>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="height-select-group" class="hidden">
+                            <label for="height-select" class="block text-sm font-bold text-slate-700 mb-2 ml-1">Height
+                                Selection (cm)</label>
+                            <div class="relative">
+                                <select id="height-select" onchange="getMeasurements()"
+                                    class="block w-full pl-4 pr-10 py-4 text-base border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-2xl transition-all appearance-none bg-slate-50">
+                                </select>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="results-card" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div class="bg-medical-50 rounded-3xl p-6 border border-medical-100">
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-500 font-medium">Measurement Range</span>
+                                    <span id="mean-range-output" class="text-slate-900 font-bold"></span>
+                                </div>
+                                <div
+                                    class="flex justify-between items-center text-sm border-t border-medical-200/30 pt-4">
+                                    <span class="text-slate-500 font-medium">5th Percentile (Min)</span>
+                                    <span id="5th-percentile-output" class="text-slate-900 font-bold"></span>
+                                </div>
+                                <div
+                                    class="flex justify-between items-center text-sm border-t border-medical-200/30 pt-4">
+                                    <span class="text-slate-500 font-medium">95th Percentile (Max)</span>
+                                    <span id="95th-percentile-output" class="text-slate-900 font-bold"></span>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 bg-medical-600 rounded-2xl p-6 text-center shadow-lg shadow-medical-200">
+                                <span
+                                    class="block text-medical-100 text-xs font-bold uppercase tracking-widest mb-2">Suggested
+                                    Normal Limits</span>
+                                <span id="normal-limits-output"
+                                    class="text-white text-3xl font-display font-bold"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="error-output" class="text-red-500 text-center text-sm font-medium"></div>
+
+                    <!-- Reference Image -->
+                    <div class="pt-6 border-t border-slate-100 text-center">
+                        <button onclick="openModal()"
+                            class="group relative overflow-hidden rounded-2xl border border-slate-200 transition-all hover:border-medical-300">
+                            <img id="reference-thumbnail" src="Images/SpleenLength.jpeg" alt="Reference Table"
+                                class="w-full opacity-60 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105">
+                            <div
+                                class="absolute inset-0 bg-slate-900/0 flex items-center justify-center transition-all group-hover:bg-slate-900/20">
+                                <div
+                                    class="bg-white/90 px-4 py-2 rounded-full text-xs font-bold shadow-sm opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all">
+                                    View Full Reference</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="image-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/90 backdrop-blur-sm">
+        <div class="relative max-w-4xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl">
+            <button onclick="closeModal()"
+                class="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-colors z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+            <div class="p-2 overflow-auto max-h-[85vh]">
+                <img id="full-size-image" src="Images/SpleenLength.jpeg" alt="Full size reference"
+                    class="w-full rounded-2xl">
+            </div>
         </div>
     </div>
 
-    <div class="input-group">
-        <label>Choose Reference Type:</label>
-        <input type="hidden" id="reference-type" value="age">
-        <div class="toggle-group">
-            <button id="ref-age" class="toggle-button active" onclick="setReferenceTypeAndToggle('age')">Age (yrs/mos)</button>
-            <button id="ref-height" class="toggle-button" onclick="setReferenceTypeAndToggle('height')">Height (cm)</button>
-        </div>
-    </div>
+    <footer class="py-12 text-center border-t border-slate-100 mt-12 bg-white">
+        <p class="text-slate-400 text-xs">© 2026 RadPedia. Reference data curated for clinical guidance.</p>
+    </footer>
 
-    <div class="input-group" id="height-select-group" style="display: none;">
-        <label for="height-select">Select Height Range (cm):</label>
-        <select id="height-select" onchange="getMeasurements()"></select>
-    </div>
+    <!-- iOS style Bottom Navigation -->
+    <nav class="ios-tab-bar">
+        <a href="../index.html" class="ios-tab-item">
+            <svg class="ios-tab-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            <span class="ios-tab-label">Home</span>
+        </a>
+        <a href="liverspleenlength.html" class="ios-tab-item active">
+            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <span class="ios-tab-label">Tools</span>
+        </a>
+        <a href="mailto:support@radpedia.com" class="ios-tab-item">
+            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <span class="ios-tab-label">Support</span>
+        </a>
+    </nav>
 
-    <div class="input-group" id="age-select-group">
-        <label for="age-select">Select Age Range:</label>
-        <select id="age-select" onchange="getMeasurements()"></select>
-    </div>
-    
-    <div id="results-card" style="display: none;">
-        <div class="result-item">
-            <span class="result-label">Measurement Range:</span>
-            <span class="result-value" id="mean-range-output"></span>
-        </div>
-        <div class="result-item">
-            <span class="result-label">5th Percentile (min):</span>
-            <span class="result-value" id="5th-percentile-output"></span>
-        </div>
-        <div class="result-item">
-            <span class="result-label">95th Percentile (max):</span>
-            <span class="result-value" id="95th-percentile-output"></span>
-        </div>
+    <script>
+        const liverData = [
+            { height: '47-64', age: '1-3 mos', mean: 64, min: 45, max: 90, p5: 53, p95: 82, lowerNormal: 40, upperNormal: 90 },
+            { height: '54-73', age: '4-6 mos', mean: 73, min: 44, max: 92, p5: 53, p95: 86, lowerNormal: 45, upperNormal: 95 },
+            { height: '65-78', age: '7-9 mos', mean: 79, min: 68, max: 100, p5: 70, p95: 90, lowerNormal: 60, upperNormal: 100 },
+            { height: '71-92', age: '1-2.5 yrs', mean: 85, min: 67, max: 104, p5: 68, p95: 98, lowerNormal: 65, upperNormal: 105 },
+            { height: '85-109', age: '3-4.9 yrs', mean: 86, min: 69, max: 109, p5: 63, p95: 105, lowerNormal: 65, upperNormal: 115 },
+            { height: '100-130', age: '5-6.9 yrs', mean: 100, min: 73, max: 107, p5: 77, p95: 124, lowerNormal: 70, upperNormal: 125 },
+            { height: '110-131', age: '7-8.9 yrs', mean: 105, min: 81, max: 128, p5: 83, p95: 128, lowerNormal: 75, upperNormal: 130 },
+            { height: '124-149', age: '9-10.9 yrs', mean: 110, min: 83, max: 135, p5: 83, p95: 128, lowerNormal: 75, upperNormal: 135 },
+            { height: '137-153', age: '11-12.9 yrs', mean: 115, min: 93, max: 137, p5: 95, p95: 136, lowerNormal: 85, upperNormal: 140 },
+            { height: '143-168', age: '13-14.9 yrs', mean: 118, min: 87, max: 140, p5: 94, p95: 140, lowerNormal: 90, upperNormal: 145 },
+            { height: '152-175', age: '15-16.7 yrs', mean: 120, min: 95, max: 147, p5: 100, p95: 145, lowerNormal: 90, upperNormal: 150 }
+        ];
 
-        <div class="final-normal-range">
-            <span class="result-label">Suggested Normal Limits Range:</span>
-            <span class="result-value" id="normal-limits-output"></span>
-        </div>
-    </div>
+        const spleenData = [
+            { height: '48-64', age: '1-3 mos', mean: 53, min: 33, max: 71, p5: 40, p95: 65, lowerNormal: 30, upperNormal: 70 },
+            { height: '54-73', age: '4-6 mos', mean: 59, min: 45, max: 71, p5: 47, p95: 67, lowerNormal: 40, upperNormal: 75 },
+            { height: '65-78', age: '7-9 mos', mean: 63, min: 50, max: 77, p5: 53, p95: 74, lowerNormal: 45, upperNormal: 80 },
+            { height: '71-92', age: '1-2.5 yrs', mean: 70, min: 54, max: 86, p5: 55, p95: 82, lowerNormal: 50, upperNormal: 85 },
+            { height: '85-109', age: '3-4.9 yrs', mean: 75, min: 60, max: 91, p5: 61, p95: 88, lowerNormal: 55, upperNormal: 95 },
+            { height: '100-130', age: '5-6.9 yrs', mean: 84, min: 61, max: 100, p5: 70, p95: 100, lowerNormal: 60, upperNormal: 105 },
+            { height: '110-131', age: '7-8.9 yrs', mean: 85, min: 65, max: 102, p5: 69, p95: 100, lowerNormal: 65, upperNormal: 105 },
+            { height: '124-149', age: '9-10.9 yrs', mean: 86, min: 64, max: 114, p5: 70, p95: 100, lowerNormal: 65, upperNormal: 110 },
+            { height: '137-153', age: '11-12.9 yrs', mean: 97, min: 72, max: 100, p5: 81, p95: 108, lowerNormal: 75, upperNormal: 115 },
+            { height: '143-168', age: '13-14.9 yrs', mean: 101, min: 84, max: 120, p5: 85, p95: 118, lowerNormal: 80, upperNormal: 120 },
+            { height: '152-175', age: '15-16.7 yrs', mean: 101, min: 88, max: 120, p5: 88, p95: 115, lowerNormal: 85, upperNormal: 120 }
+        ];
 
-    <div class="error-message" id="error-output"></div>
+        let currentOrgan = 'spleen';
+        let dataSet = spleenData;
 
-    <hr style="margin-top: 25px;">
-    <div class="thumbnail-container">
-        <span class="thumbnail-text">Click to view reference table:</span>
-        <img src="Images/SpleenLength.jpeg" alt="Reference Table Thumbnail" id="reference-thumbnail">
-    </div>
-</div>
+        function setOrgan(organ) {
+            const spleenBtn = document.getElementById('organ-spleen');
+            const liverBtn = document.getElementById('organ-liver');
 
-<div id="image-modal" class="modal-overlay">
-    <div class="modal-content">
-        <button class="close-button" id="close-modal-button">&times;</button>
-        <img src="Images/SpleenLength.jpeg" alt="Reference Table Full Size" id="full-size-image">
-    </div>
-</div>
+            spleenBtn.className = "py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 text-slate-500 hover:bg-white/50";
+            liverBtn.className = "py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 text-slate-500 hover:bg-white/50";
 
-<!-- ...all previous code remains the same up to the <script> section... -->
-
-<script>
-    const liverData = [
-        { height: '47-64', age: '1-3 mos', mean: 64, min: 45, max: 90, p5: 53, p95: 82, lowerNormal: 40, upperNormal: 90 },
-        { height: '54-73', age: '4-6 mos', mean: 73, min: 44, max: 92, p5: 53, p95: 86, lowerNormal: 45, upperNormal: 95 },
-        { height: '65-78', age: '7-9 mos', mean: 79, min: 68, max: 100, p5: 70, p95: 90, lowerNormal: 60, upperNormal: 100 },
-        { height: '71-92', age: '1-2.5 yrs', mean: 85, min: 67, max: 104, p5: 68, p95: 98, lowerNormal: 65, upperNormal: 105 },
-        { height: '85-109', age: '3-4.9 yrs', mean: 86, min: 69, max: 109, p5: 63, p95: 105, lowerNormal: 65, upperNormal: 115 },
-        { height: '100-130', age: '5-6.9 yrs', mean: 100, min: 73, max: 107, p5: 77, p95: 124, lowerNormal: 70, upperNormal: 125 },
-        { height: '110-131', age: '7-8.9 yrs', mean: 105, min: 81, max: 128, p5: 83, p95: 128, lowerNormal: 75, upperNormal: 130 },
-        { height: '124-149', age: '9-10.9 yrs', mean: 110, min: 83, max: 135, p5: 83, p95: 128, lowerNormal: 75, upperNormal: 135 },
-        { height: '137-153', age: '11-12.9 yrs', mean: 115, min: 93, max: 137, p5: 95, p95: 136, lowerNormal: 85, upperNormal: 140 },
-        { height: '143-168', age: '13-14.9 yrs', mean: 118, min: 87, max: 140, p5: 94, p95: 140, lowerNormal: 90, upperNormal: 145 },
-        { height: '152-175', age: '15-16.7 yrs', mean: 120, min: 95, max: 147, p5: 100, p95: 145, lowerNormal: 90, upperNormal: 150 }
-    ];
-
-    const spleenData = [
-        { height: '48-64', age: '1-3 mos', mean: 53, min: 33, max: 71, p5: 40, p95: 65, lowerNormal: 30, upperNormal: 70 },
-        { height: '54-73', age: '4-6 mos', mean: 59, min: 45, max: 71, p5: 47, p95: 67, lowerNormal: 40, upperNormal: 75 },
-        { height: '65-78', age: '7-9 mos', mean: 63, min: 50, max: 77, p5: 53, p95: 74, lowerNormal: 45, upperNormal: 80 },
-        { height: '71-92', age: '1-2.5 yrs', mean: 70, min: 54, max: 86, p5: 55, p95: 82, lowerNormal: 50, upperNormal: 85 },
-        { height: '85-109', age: '3-4.9 yrs', mean: 75, min: 60, max: 91, p5: 61, p95: 88, lowerNormal: 55, upperNormal: 95 },
-        { height: '100-130', age: '5-6.9 yrs', mean: 84, min: 61, max: 100, p5: 70, p95: 100, lowerNormal: 60, upperNormal: 105 },
-        { height: '110-131', age: '7-8.9 yrs', mean: 85, min: 65, max: 102, p5: 69, p95: 100, lowerNormal: 65, upperNormal: 105 },
-        { height: '124-149', age: '9-10.9 yrs', mean: 86, min: 64, max: 114, p5: 70, p95: 100, lowerNormal: 65, upperNormal: 110 },
-        { height: '137-153', age: '11-12.9 yrs', mean: 97, min: 72, max: 100, p5: 81, p95: 108, lowerNormal: 75, upperNormal: 115 },
-        { height: '143-168', age: '13-14.9 yrs', mean: 101, min: 84, max: 120, p5: 85, p95: 118, lowerNormal: 80, upperNormal: 120 },
-        { height: '152-175', age: '15-16.7 yrs', mean: 101, min: 88, max: 120, p5: 88, p95: 115, lowerNormal: 85, upperNormal: 120 }
-    ];
-
-    let currentOrgan = 'spleen';
-    let dataSet = spleenData;
-
-    document.addEventListener('DOMContentLoaded', () => {
-        populateDropdowns();
-        toggleInputs();
-
-        const thumbnail = document.getElementById('reference-thumbnail');
-        const modal = document.getElementById('image-modal');
-        const closeModalButton = document.getElementById('close-modal-button');
-
-        thumbnail.onclick = function() { modal.style.display = "flex"; }
-        closeModalButton.onclick = function() { modal.style.display = "none"; }
-        window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
-    });
-
-    function setOrgan(organ) {
-        const spleenBtn = document.getElementById('organ-spleen');
-        const liverBtn = document.getElementById('organ-liver');
-        spleenBtn.classList.remove('active');
-        liverBtn.classList.remove('active');
-
-        if (organ === 'spleen') {
-            spleenBtn.classList.add('active');
-            currentOrgan = 'spleen';
-            dataSet = spleenData;
-            document.getElementById('reference-thumbnail').src = 'Images/SpleenLength.jpeg';
-            document.getElementById('full-size-image').src = 'Images/SpleenLength.jpeg';
-        } else {
-            liverBtn.classList.add('active');
-            currentOrgan = 'liver';
-            dataSet = liverData;
-            document.getElementById('reference-thumbnail').src = 'Images/LiverLength.jpeg';
-            document.getElementById('full-size-image').src = 'Images/LiverLength.jpeg';
+            if (organ === 'spleen') {
+                spleenBtn.className = "py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 bg-white text-medical-600 shadow-sm";
+                currentOrgan = 'spleen';
+                dataSet = spleenData;
+                document.getElementById('reference-thumbnail').src = 'Images/SpleenLength.jpeg';
+                document.getElementById('full-size-image').src = 'Images/SpleenLength.jpeg';
+            } else {
+                liverBtn.className = "py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 bg-white text-medical-600 shadow-sm";
+                currentOrgan = 'liver';
+                dataSet = liverData;
+                document.getElementById('reference-thumbnail').src = 'Images/LiverLength.jpeg';
+                document.getElementById('full-size-image').src = 'Images/LiverLength.jpeg';
+            }
+            populateDropdowns();
+            getMeasurements();
         }
-        populateDropdowns();
-        toggleInputs();
-    }
 
-    function populateDropdowns() {
-        const ageSelect = document.getElementById('age-select');
-        const heightSelect = document.getElementById('height-select');
+        function populateDropdowns() {
+            const ageSelect = document.getElementById('age-select');
+            const heightSelect = document.getElementById('height-select');
+            const prevAge = ageSelect.value;
+            const prevHeight = heightSelect.value;
 
-        const previousAge = ageSelect.value;
-        const previousHeight = heightSelect.value;
+            ageSelect.innerHTML = '<option value="">-- Select Age Range --</option>';
+            heightSelect.innerHTML = '<option value="">-- Select Height Range --</option>';
 
-        ageSelect.innerHTML = '<option value="">-- Select Age --</option>';
-        heightSelect.innerHTML = '<option value="">-- Select Height Range --</option>';
+            dataSet.forEach(item => {
+                const ageOpt = document.createElement('option');
+                ageOpt.value = item.age;
+                ageOpt.textContent = `${item.age} (Height: ${item.height} cm)`;
+                ageSelect.appendChild(ageOpt);
 
-        dataSet.forEach(item => {
-            const ageOption = document.createElement('option');
-            ageOption.value = item.age;
-            ageOption.textContent = item.age + ' (Height: ' + item.height + ' cm)';
-            ageSelect.appendChild(ageOption);
+                const hOpt = document.createElement('option');
+                hOpt.value = item.height;
+                hOpt.textContent = `${item.height} cm (${item.age})`;
+                heightSelect.appendChild(hOpt);
+            });
 
-            const heightOption = document.createElement('option');
-            heightOption.value = item.height;
-            heightOption.textContent = item.height + ' cm (' + item.age + ')';
-            heightSelect.appendChild(heightOption);
+            ageSelect.value = prevAge;
+            heightSelect.value = prevHeight;
+        }
+
+        function setReferenceTypeAndToggle(type) {
+            document.getElementById('reference-type').value = type;
+            const ageBtn = document.getElementById('ref-age');
+            const heightBtn = document.getElementById('ref-height');
+
+            ageBtn.className = "py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 text-slate-500 hover:bg-white/50";
+            heightBtn.className = "py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 text-slate-500 hover:bg-white/50";
+
+            if (type === 'age') {
+                ageBtn.className = "py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 bg-white text-medical-600 shadow-sm";
+                document.getElementById('age-select-group').classList.remove('hidden');
+                document.getElementById('height-select-group').classList.add('hidden');
+            } else {
+                heightBtn.className = "py-3 px-4 rounded-xl text-sm font-bold transition-all duration-200 bg-white text-medical-600 shadow-sm";
+                document.getElementById('height-select-group').classList.remove('hidden');
+                document.getElementById('age-select-group').classList.add('hidden');
+            }
+            getMeasurements();
+        }
+
+        function getMeasurements() {
+            const type = document.getElementById('reference-type').value;
+            let row = null;
+            const resCard = document.getElementById('results-card');
+            const errorOut = document.getElementById('error-output');
+
+            errorOut.textContent = '';
+            resCard.classList.add('hidden');
+
+            if (type === 'height') {
+                const val = document.getElementById('height-select').value;
+                if (!val) return;
+                row = dataSet.find(r => r.height === val);
+            } else {
+                const val = document.getElementById('age-select').value;
+                if (!val) return;
+                row = dataSet.find(r => r.age === val);
+            }
+
+            if (row) {
+                document.getElementById('mean-range-output').textContent = `${row.min} - ${row.max} mm (Mean: ${row.mean} mm)`;
+                document.getElementById('5th-percentile-output').textContent = `${row.p5} mm`;
+                document.getElementById('95th-percentile-output').textContent = `${row.p95} mm`;
+                document.getElementById('normal-limits-output').textContent = `${row.lowerNormal} - ${row.upperNormal} mm`;
+                resCard.classList.remove('hidden');
+            }
+        }
+
+        function openModal() {
+            document.getElementById('image-modal').classList.replace('hidden', 'flex');
+        }
+
+        function closeModal() {
+            document.getElementById('image-modal').classList.replace('flex', 'hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateDropdowns();
+            window.onclick = (e) => { if (e.target.id === 'image-modal') closeModal(); };
         });
+    </script>
+</body>
 
-        ageSelect.value = previousAge;
-        heightSelect.value = previousHeight;
-    }
-
-    function setReferenceTypeAndToggle(type) {
-        document.getElementById('reference-type').value = type;
-        document.getElementById('ref-age').classList.toggle('active', type === 'age');
-        document.getElementById('ref-height').classList.toggle('active', type === 'height');
-        toggleInputs();
-    }
-
-    function toggleInputs() {
-        const type = document.getElementById('reference-type').value;
-        document.getElementById('height-select-group').style.display = type === 'height' ? 'flex' : 'none';
-        document.getElementById('age-select-group').style.display = type === 'age' ? 'flex' : 'none';
-        getMeasurements();
-    }
-
-    function getMeasurements() {
-        const type = document.getElementById('reference-type').value;
-        let dataRow = null;
-        const errorOutput = document.getElementById('error-output');
-        errorOutput.textContent = '';
-        document.getElementById('results-card').style.display = 'none';
-
-        if (!type) return;
-
-        if (type === 'height') {
-            const selectedHeight = document.getElementById('height-select').value;
-            if (!selectedHeight) return;
-            dataRow = dataSet.find(row => row.height === selectedHeight);
-        } else {
-            const selectedAge = document.getElementById('age-select').value;
-            if (!selectedAge) return;
-            dataRow = dataSet.find(row => row.age === selectedAge);
-        }
-
-        if (dataRow) {
-            document.getElementById('mean-range-output').textContent = `${dataRow.min} - ${dataRow.max} mm (Mean: ${dataRow.mean} mm)`;
-            document.getElementById('5th-percentile-output').textContent = `${dataRow.p5} mm`;
-            document.getElementById('95th-percentile-output').textContent = `${dataRow.p95} mm`;
-            document.getElementById('normal-limits-output').textContent = `${dataRow.lowerNormal} - ${dataRow.upperNormal} mm`;
-            document.getElementById('results-card').style.display = 'block';
-        } else {
-            errorOutput.textContent = 'Data could not be found for the selected input.';
-        }
-    }
-</script>
+</html>
