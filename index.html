@@ -62,6 +62,7 @@
             --sal: env(safe-area-inset-left);
         }
 
+        html,
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
@@ -78,7 +79,18 @@
             -ms-overflow-style: none;
         }
 
+        html::-webkit-scrollbar,
         body::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .no-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
             width: 0;
             height: 0;
         }

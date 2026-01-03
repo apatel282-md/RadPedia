@@ -61,6 +61,7 @@
             --sal: env(safe-area-inset-left);
         }
 
+        html,
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
@@ -74,7 +75,18 @@
             -ms-overflow-style: none;
         }
 
+        html::-webkit-scrollbar,
         body::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .no-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
             width: 0;
             height: 0;
         }
@@ -292,7 +304,7 @@
                     </path>
                 </svg>
             </button>
-            <div class="p-2 overflow-auto max-h-[85vh]">
+            <div class="p-2 overflow-auto max-h-[85vh] no-scrollbar">
                 <img id="full-size-image" src="Images/SpleenLength.jpeg" alt="Full size reference"
                     class="w-full rounded-2xl">
             </div>
