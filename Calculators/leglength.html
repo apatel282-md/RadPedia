@@ -299,10 +299,11 @@
             const L_DF = getInputValue('left-distal-femur');
             const L_DT = getInputValue('left-distal-tibia');
 
-            const R_Femur = R_PF - R_DF;
-            const L_Femur = L_PF - L_DF;
-            const R_Tibia = R_DF - R_DT;
-            const L_Tibia = L_DF - L_DT;
+            // Segment lengths use distal minus proximal (mark positions along the same scale).
+            const R_Femur = R_DF - R_PF;
+            const L_Femur = L_DF - L_PF;
+            const R_Tibia = R_DT - R_DF;
+            const L_Tibia = L_DT - L_DF;
             const R_Total = R_Femur + R_Tibia;
             const L_Total = L_Femur + L_Tibia;
 
