@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>FOR Calculator | RadPedia</title>
 
     <!-- PWA & iOS Meta Tags -->
@@ -55,13 +55,19 @@
     </script>
     <style>
         :root {
+            --sat: env(safe-area-inset-top);
+            --sar: env(safe-area-inset-right);
             --sab: env(safe-area-inset-bottom);
+            --sal: env(safe-area-inset-left);
         }
 
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             padding-bottom: calc(85px + var(--sab));
+            padding-top: var(--sat);
+            padding-left: var(--sal);
+            padding-right: var(--sar);
             background-color: #1E1E1E;
             color: #FFFFFF;
         }
@@ -256,19 +262,28 @@
             </svg>
             <span class="ios-tab-label">Home</span>
         </a>
-        <a href="liverspleenlength.html" class="ios-tab-item active">
-            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        <a href="liverspleenlength.html" class="ios-tab-item">
+            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h4l2-5 4 10 2-5h4" />
             </svg>
-            <span class="ios-tab-label">Tools</span>
+            <span class="ios-tab-label">Liver/Spleen</span>
         </a>
-        <a href="mailto:support@radpedia.com" class="ios-tab-item">
-            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        <a href="leglength.html" class="ios-tab-item">
+            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="6" width="18" height="12" rx="2" />
+                <path d="M7 6v4M11 6v4M15 6v4M19 6v4" />
             </svg>
-            <span class="ios-tab-label">Support</span>
+            <span class="ios-tab-label">Leg Length</span>
+        </a>
+        <a href="FORCalculator.html" class="ios-tab-item active">
+            <svg class="ios-tab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18" />
+                <path d="M7 14l3-3 3 2 4-4" />
+            </svg>
+            <span class="ios-tab-label">FOR Ratio</span>
         </a>
     </nav>
 
