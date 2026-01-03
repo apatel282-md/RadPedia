@@ -28,17 +28,25 @@
                         display: ['Outfit', 'sans-serif'],
                     },
                     colors: {
-                        medical: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
+                        brand: {
+                            primary: {
+                                100: '#2E8B57',
+                                200: '#61bc84',
+                                300: '#c6ffe6',
+                            },
+                            accent: {
+                                100: '#8FBC8F',
+                                200: '#345e37',
+                            },
+                            text: {
+                                100: '#FFFFFF',
+                                200: '#e0e0e0',
+                            },
+                            bg: {
+                                100: '#1E1E1E',
+                                200: '#2d2d2d',
+                                300: '#454545',
+                            }
                         },
                     },
                 }
@@ -54,13 +62,15 @@
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             padding-bottom: calc(85px + var(--sab));
+            background-color: #1E1E1E;
+            color: #FFFFFF;
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(45, 45, 45, 0.8);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .ios-tab-bar {
@@ -69,10 +79,10 @@
             left: 0;
             right: 0;
             height: calc(65px + var(--sab));
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(45, 45, 45, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: var(--sab);
             display: flex;
             justify-content: space-around;
@@ -85,12 +95,12 @@
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            color: #94a3b8;
+            color: #8FBC8F;
             text-decoration: none;
         }
 
         .ios-tab-item.active {
-            color: #0284c7;
+            color: #61bc84;
         }
 
         .ios-tab-icon {
@@ -105,151 +115,169 @@
     </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
+<body class="bg-brand-bg-100 text-brand-text-100 font-sans min-h-screen flex flex-col">
 
     <!-- Navigation -->
-    <nav class="glass sticky top-0 z-50 border-b border-slate-200/50">
+    <nav class="glass sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <a href="../index.html" class="flex items-center gap-2 group">
                     <div
-                        class="w-8 h-8 bg-medical-600 rounded-lg flex items-center justify-center text-white font-display font-bold text-lg shadow-lg shadow-medical-200 transition-transform group-hover:scale-110">
+                        class="w-8 h-8 bg-brand-primary-100 rounded-lg flex items-center justify-center text-white font-display font-bold text-lg shadow-lg shadow-brand-primary-100/20 transition-transform group-hover:scale-110">
                         R</div>
-                    <span class="text-xl font-display font-bold tracking-tight text-slate-800">RadPedia</span>
+                    <span class="text-xl font-display font-bold tracking-tight text-white">RadPedia</span>
                 </a>
                 <a href="../index.html"
-                    class="text-sm font-medium text-slate-600 hover:text-medical-600 transition-colors flex items-center gap-1">
+                    class="text-sm font-medium text-brand-text-200 hover:text-brand-primary-200 transition-colors flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
-                    Back to Dashboard
+                    Dashboard
                 </a>
             </div>
         </div>
     </nav>
 
     <main class="flex-grow py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto">
-            <div
-                class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden">
-                <div class="px-8 pt-10 pb-6 border-b border-slate-50 text-center">
-                    <h1 class="text-3xl font-display font-extrabold text-slate-900">Leg Length Calculator</h1>
-                    <p class="mt-2 text-slate-500 text-sm">Analyze limb length discrepancies and segment measurements.
-                    </p>
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-brand-bg-200 rounded-[2.5rem] shadow-xl border border-white/5 overflow-hidden">
+                <div class="px-8 pt-10 pb-6 border-b border-white/5 text-center">
+                    <h1 class="text-3xl font-display font-extrabold text-white">Leg Length Calculator</h1>
+                    <p class="mt-2 text-brand-text-200 text-sm">Calculate femur, tibia and limb length discrepancy.</p>
                 </div>
 
                 <div class="p-8 space-y-10">
-                    <!-- Input Section -->
-                    <div>
-                        <h2 class="text-lg font-display font-bold text-slate-800 mb-6 flex items-center gap-2">
-                            <div class="w-2 h-6 bg-medical-500 rounded-full"></div>
-                            Measurement Input (cm)
-                        </h2>
-                        <div class="overflow-hidden rounded-3xl border border-slate-100 bg-slate-50 p-6">
-                            <div
-                                class="grid grid-cols-3 gap-6 mb-4 font-bold text-xs uppercase tracking-widest text-slate-400">
-                                <div class="col-span-1 pl-4">Mark</div>
-                                <div class="text-center">Right</div>
-                                <div class="text-center">Left</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <!-- Inputs -->
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="text-sm font-bold text-brand-text-200 mb-6 flex items-center gap-2">
+                                    <div class="w-1 h-4 bg-brand-primary-100 rounded-full"></div>
+                                    Right Leg (mm)
+                                </h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Proximal
+                                            Femur</label>
+                                        <input type="number" id="right-proximal-femur" oninput="calculateLength()"
+                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-100/20 rounded-2xl bg-brand-bg-300 text-white"
+                                            placeholder="0">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Distal
+                                            Femur</label>
+                                        <input type="number" id="right-distal-femur" oninput="calculateLength()"
+                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-100/20 rounded-2xl bg-brand-bg-300 text-white"
+                                            placeholder="0">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Distal
+                                            Tibia</label>
+                                        <input type="number" id="right-distal-tibia" oninput="calculateLength()"
+                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-100/20 rounded-2xl bg-brand-bg-300 text-white"
+                                            placeholder="0">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="space-y-4">
-                                <div class="grid grid-cols-3 items-center gap-4">
-                                    <div class="text-sm font-semibold text-slate-600 pl-4">Proximal Femur</div>
-                                    <input type="number" id="right-proximal-femur" oninput="calculateLength()"
-                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
-                                        placeholder="0">
-                                    <input type="number" id="left-proximal-femur" oninput="calculateLength()"
-                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
-                                        placeholder="0">
-                                </div>
-                                <div class="grid grid-cols-3 items-center gap-4">
-                                    <div class="text-sm font-semibold text-slate-600 pl-4">Distal Femur</div>
-                                    <input type="number" id="right-distal-femur" oninput="calculateLength()"
-                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
-                                        placeholder="0">
-                                    <input type="number" id="left-distal-femur" oninput="calculateLength()"
-                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
-                                        placeholder="0">
-                                </div>
-                                <div class="grid grid-cols-3 items-center gap-4">
-                                    <div class="text-sm font-semibold text-slate-600 pl-4">Distal Tibia</div>
-                                    <input type="number" id="right-distal-tibia" oninput="calculateLength()"
-                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
-                                        placeholder="0">
-                                    <input type="number" id="left-distal-tibia" oninput="calculateLength()"
-                                        class="block w-full py-3 text-center border-slate-200 focus:outline-none focus:ring-4 focus:ring-medical-100 focus:border-medical-500 rounded-xl transition-all bg-white"
-                                        placeholder="0">
+                        </div>
+
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="text-sm font-bold text-brand-text-200 mb-6 flex items-center gap-2">
+                                    <div class="w-1 h-4 bg-brand-primary-200 rounded-full"></div>
+                                    Left Leg (mm)
+                                </h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Proximal
+                                            Femur</label>
+                                        <input type="number" id="left-proximal-femur" oninput="calculateLength()"
+                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-200/20 rounded-2xl bg-brand-bg-300 text-white"
+                                            placeholder="0">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Distal
+                                            Femur</label>
+                                        <input type="number" id="left-distal-femur" oninput="calculateLength()"
+                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-200/20 rounded-2xl bg-brand-bg-300 text-white"
+                                            placeholder="0">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-brand-text-200 mb-2 ml-1">Distal
+                                            Tibia</label>
+                                        <input type="number" id="left-distal-tibia" oninput="calculateLength()"
+                                            class="block w-full px-4 py-3 text-sm border-white/5 focus:ring-4 focus:ring-brand-primary-200/20 rounded-2xl bg-brand-bg-300 text-white"
+                                            placeholder="0">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Output Section -->
-                    <div id="results-container" class="space-y-6">
-                        <h2 class="text-lg font-display font-bold text-slate-800 flex items-center gap-2">
-                            <div class="w-2 h-6 bg-medical-500 rounded-full"></div>
-                            Calculated Results (cm)
-                        </h2>
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- Femur -->
-                            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-100 space-y-4">
-                                <div class="text-xs font-bold uppercase tracking-widest text-medical-600">Femur</div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm"><span
-                                            class="text-slate-500">Right</span><span id="output-right-femur"
-                                            class="font-bold">0.0</span></div>
-                                    <div class="flex justify-between text-sm"><span
-                                            class="text-slate-500">Left</span><span id="output-left-femur"
-                                            class="font-bold">0.0</span></div>
-                                    <div class="flex justify-between text-sm pt-2 border-t border-slate-200"><span
-                                            class="text-slate-500">Diff</span><span id="discrepancy-femur"
-                                            class="font-bold text-medical-600">0.0</span></div>
-                                </div>
-                            </div>
-                            <!-- Tibia -->
-                            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-100 space-y-4">
-                                <div class="text-xs font-bold uppercase tracking-widest text-medical-600">Tibia</div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm"><span
-                                            class="text-slate-500">Right</span><span id="output-right-tibia"
-                                            class="font-bold">0.0</span></div>
-                                    <div class="flex justify-between text-sm"><span
-                                            class="text-slate-500">Left</span><span id="output-left-tibia"
-                                            class="font-bold">0.0</span></div>
-                                    <div class="flex justify-between text-sm pt-2 border-t border-slate-200"><span
-                                            class="text-slate-500">Diff</span><span id="discrepancy-tibia"
-                                            class="font-bold text-medical-600">0.0</span></div>
-                                </div>
-                            </div>
-                            <!-- Total -->
-                            <div
-                                class="bg-medical-600 p-6 rounded-[2rem] text-white shadow-xl shadow-medical-200 space-y-4">
-                                <div class="text-xs font-bold uppercase tracking-widest text-medical-100">Total Leg
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm"><span
-                                            class="text-medical-200">Right</span><span id="output-right-total"
-                                            class="font-bold">0.0</span></div>
-                                    <div class="flex justify-between text-sm"><span
-                                            class="text-medical-200">Left</span><span id="output-left-total"
-                                            class="font-bold">0.0</span></div>
-                                    <div class="flex justify-between text-sm pt-2 border-t border-medical-500/50"><span
-                                            class="text-medical-200">Diff</span><span id="discrepancy-total"
-                                            class="font-bold text-yellow-300">0.0</span></div>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Results Table -->
+                    <div id="results-card"
+                        class="bg-brand-bg-100 rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-brand-bg-300 border-b border-white/5">
+                                    <th
+                                        class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-brand-text-200">
+                                        Segment</th>
+                                    <th
+                                        class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-brand-text-200 text-center">
+                                        Right (mm)</th>
+                                    <th
+                                        class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-brand-text-200 text-center">
+                                        Left (mm)</th>
+                                    <th
+                                        class="px-6 py-5 text-xs font-bold uppercase tracking-widest text-brand-primary-200 text-right">
+                                        Diff (mm)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                <tr class="hover:bg-white/5 transition-colors">
+                                    <td class="px-6 py-5 text-sm font-bold text-white">Femur</td>
+                                    <td id="right-femur"
+                                        class="px-6 py-5 text-sm font-medium text-brand-text-200 text-center">--</td>
+                                    <td id="left-femur"
+                                        class="px-6 py-5 text-sm font-medium text-brand-text-200 text-center">--</td>
+                                    <td id="femur-diff"
+                                        class="px-6 py-5 text-sm font-bold text-brand-primary-100 text-right">--</td>
+                                </tr>
+                                <tr class="hover:bg-white/5 transition-colors">
+                                    <td class="px-6 py-5 text-sm font-bold text-white">Tibia</td>
+                                    <td id="right-tibia"
+                                        class="px-6 py-5 text-sm font-medium text-brand-text-200 text-center">--</td>
+                                    <td id="left-tibia"
+                                        class="px-6 py-5 text-sm font-medium text-brand-text-200 text-center">--</td>
+                                    <td id="tibia-diff"
+                                        class="px-6 py-5 text-sm font-bold text-brand-primary-100 text-right">--</td>
+                                </tr>
+                                <tr class="bg-brand-primary-100/10">
+                                    <td class="px-6 py-6 text-sm font-extrabold text-white">Total</td>
+                                    <td id="right-total"
+                                        class="px-6 py-6 text-sm font-extrabold text-white text-center">--</td>
+                                    <td id="left-total" class="px-6 py-6 text-sm font-extrabold text-white text-center">
+                                        --</td>
+                                    <td id="total-diff"
+                                        class="px-6 py-6 text-lg font-extrabold text-brand-primary-200 text-right">
+                                        --</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
-                    <!-- Anatomical Reference -->
-                    <div class="pt-8 border-t border-slate-100">
-                        <p class="text-center text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">
-                            Anatomical Reference Guide</p>
-                        <div class="bg-slate-50 rounded-3xl p-4 border border-slate-100">
-                            <img src="Images/leglength.png" alt="Anatomical marks Guide"
-                                class="w-full rounded-2xl mix-blend-multiply opacity-80">
+                    <!-- Reference Image -->
+                    <div class="pt-8 text-center">
+                        <p class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-brand-text-200 mb-6">
+                            Anatomical Landmarks Guide</p>
+                        <div class="inline-block relative group">
+                            <div
+                                class="absolute -inset-1 bg-gradient-to-r from-brand-primary-100 to-brand-accent-100 rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200">
+                            </div>
+                            <img src="../Images/LegLength.png" alt="Leg Length Measurements"
+                                class="relative w-full max-w-lg rounded-[2rem] border border-white/5 shadow-2xl filter brightness-90 contrast-110">
                         </div>
                     </div>
                 </div>
@@ -257,8 +285,8 @@
         </div>
     </main>
 
-    <footer class="py-12 text-center border-t border-slate-100 mt-12 bg-white">
-        <p class="text-slate-400 text-xs">© 2026 RadPedia. Reference data curated for clinical guidance.</p>
+    <footer class="py-12 text-center border-t border-white/5 mt-12 bg-brand-bg-200">
+        <p class="text-brand-text-200 text-xs">© 2026 RadPedia. Reference data curated for clinical guidance.</p>
     </footer>
 
     <!-- iOS style Bottom Navigation -->
